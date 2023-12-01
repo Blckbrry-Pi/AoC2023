@@ -9,9 +9,9 @@ I might give up on that by day 7, but I will get through the first week at
 first!
 
 ## Languages
-- [ ] Day 1: [Typescript](https://www.typescriptlang.org/)
-  - [ ] Part 1
-  - [ ] Part 2
+- [x] Day 1: [Typescript](https://www.typescriptlang.org/)
+  - [x] Part 1
+  - [x] Part 2
 - [ ] Day 2: [Python](https://www.python.org/)
     - [ ] Part 1
     - [ ] Part 2
