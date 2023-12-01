@@ -13,5 +13,20 @@ first!
   - [x] Part 1
   - [x] Part 2
 - [ ] Day 2: [Python](https://www.python.org/)
-    - [ ] Part 1
-    - [ ] Part 2
+  - [ ] Part 1
+  - [ ] Part 2
+- [ ] Day 3: [Java](https://www.java.com/)
+  - [ ] Part 1
+  - [ ] Part 2
+- [ ] Day 4: [C](https://en.wikipedia.org/wiki/C_(programming_language))
+  - [ ] Part 1
+  - [ ] Part 2
+- [ ] Day 5: [C#/Microsoft Java](https://dotnet.microsoft.com/languages/csharp)
+  - [ ] Part 1
+  - [ ] Part 2
+- [ ] Day 6: [Go](https://go.dev)
+  - [ ] Part 1
+  - [ ] Part 2
+- [ ] Day 7: [Rust](https://www.rust-lang.org)
+  - [ ] Part 1
+  - [ ] Part 2
