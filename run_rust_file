@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+OUTPUT_FILE_NAME=$(basename $1 .rs)
+
+rustc -o $OUTPUT_FILE_NAME $1 && ./$OUTPUT_FILE_NAME && rm $OUTPUT_FILE_NAME
