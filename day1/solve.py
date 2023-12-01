@@ -51,4 +51,5 @@ def process_line_day_2(line: str) -> Union[int, float]:
 processed_lines_day_1 = map(process_line_day_1, get_file_lines("./day1/input.txt"))
 processed_lines_day_2 = map(process_line_day_2, get_file_lines("./day1/input.txt"))
 
-print(sum(processed_lines_day_1), sum(processed_lines_day_2))
+print("Part 1:", sum(processed_lines_day_1))
+print("Part 2:", sum(processed_lines_day_2))

@@ -48,4 +48,5 @@ const values = readFileSync("./day1/input.txt", "utf-8").split("\n");
 const part1 = sum(...values.map(line => lineValue(line, false)));
 const part2 = sum(...values.map(line => lineValue(line, true)));
 
-console.log({ part1, part2 });
+console.log("Part 1:", part1);
+console.log("Part 2:", part2);
