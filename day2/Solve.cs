@@ -17,9 +17,9 @@ public class Solve
             part2 += game.GetValuePart2();
         }
 
-        System.Console.Write("Part 1:");
+        System.Console.Write("Part 1: ");
         System.Console.WriteLine(part1);
-        System.Console.Write("Part 2:");
+        System.Console.Write("Part 2: ");
         System.Console.WriteLine(part2);
     }
 

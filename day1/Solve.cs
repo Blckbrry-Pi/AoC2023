@@ -15,9 +15,9 @@ public class Solve
             part2 += line.Part2().Value();
         }
 
-        System.Console.Write("Part 1:");
+        System.Console.Write("Part 1: ");
         System.Console.WriteLine(part1);
-        System.Console.Write("Part 2:");
+        System.Console.Write("Part 2: ");
         System.Console.WriteLine(part2);
     }
 
