@@ -22,7 +22,6 @@ def process_game(line: str) -> tuple[int, list[tuple[int, int, int]]]:
     return (int(game_num.strip()[4:]), rounds)
 
 def process_line_p1(line: str) -> Union[int, float]:
-    # TODO: Wait for Day 2 to come out
     id, rounds = process_game(line)
     for round in rounds:
         if round[0] > 12 or round[1] > 13 or round[2] > 14:
@@ -33,13 +32,11 @@ def process_line_p1(line: str) -> Union[int, float]:
 def process_line_p2(line: str) -> Union[int, float]:
     r, g, b = 0, 0, 0
 
-    # TODO: Wait for Day 2 to come out
     id, rounds = process_game(line)
     for round in rounds:
         r = max(r, round[0])
         g = max(g, round[1])
         b = max(b, round[2])
-    # TODO: Wait for Day 2 to come out
     return r * g * b
 
 
