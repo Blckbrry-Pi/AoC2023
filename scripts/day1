@@ -1,0 +1,32 @@
+#!/bin/zsh
+echo "--------Day 01--------"
+echo 
+
+echo "C"
+./run_c_file day1/solve.c
+echo
+
+echo "C#"
+./run_c#_file day1/Solve.cs
+echo
+
+echo "Go"
+go run day1/solve.go
+echo 
+
+echo "Java"
+java day1/Solve.java
+echo
+
+echo "Python"
+python3 day1/solve.py
+echo
+
+echo "Rust"
+./run_rust_file day1/solve.rs
+echo
+
+echo "Typescript"
+npx ts-node day1/solve.ts
+echo
+
