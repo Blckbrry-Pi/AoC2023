@@ -153,7 +153,6 @@ int main() {
     int part2 = 0;
 
     while (fgets(myString, 1000, fptr)) {
-        // printf("Id: %d\n", parseGame(myString).id);
         part1 += get_value_p1(parseGame(myString));
         part2 += get_value_p2(parseGame(myString));
     }
