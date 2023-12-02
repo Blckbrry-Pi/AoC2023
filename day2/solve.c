@@ -143,20 +143,6 @@ int get_value_p2(Game game) {
     return max_round.red * max_round.green * max_round.blue;
 }
 
-// int get_value(char *line) {
-//     int first = -1;
-//     int last = -1;
-    
-//     for (int i = 0; line[i] != '\0'; i++) {
-//         if ('0' <= line[i] && line[i] <= '9') {
-
-//             if (first == -1) first = line[i] - '0';
-//             last = line[i] - '0';
-//         }
-//     }
-//     return first * 10 + last;
-// }
-
 int main() {
     FILE *fptr;
     char myString[1000];
