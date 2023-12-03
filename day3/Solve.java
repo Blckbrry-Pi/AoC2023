@@ -3,79 +3,55 @@ package day3;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import java.util.Scanner;
-import java.io.File;
-
+import javautils.Utils;
 
 // FIXME: Self-explanatory
 public class Solve {
     public static void main(String[] args) {
-        ArrayList<String> strLines = new ArrayList<>();
-        try {
-            File inputFile = new File("./day3/input.txt");
-            Scanner inputFileReader = new Scanner(inputFile);
-            while (inputFileReader.hasNextLine()) {
-                strLines.add(inputFileReader.nextLine());
-            }
-            inputFileReader.close();
-        } catch (Exception e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-
-        String[] lines = strLines.toArray(new String[strLines.size()]);
+        String[] lines = javautils.Utils.fileLines("day3/input.txt");
         Schematic schematic = new Schematic(lines);
 
-        HashSet<SchematicLocation> numbers = new HashSet<>();
 
-        HashSet<SchematicLocation> usedNumbers = new HashSet<>();
+        HashSet<NumberId> usedNumbers = new HashSet<>();
+        HashSet<Symbol> symbols = new HashSet<>();
+        HashSet<Star> stars = new HashSet<>();
 
-        for (int x = 0; x < schematic.getWidth(); x++) {
-            for (int y = 0; y < schematic.getHeight(); y++) {
+        for (int x : javautils.Utils.range(0, schematic.getWidth())) {
+            for (int y : javautils.Utils.range(0, schematic.getHeight())) {
                 Token token = schematic.getTokenAt(x, y);
-                if (token.isNumber()) {
-                    numbers.add(new SchematicLocation(x, y));
+                if (token.isSymbol()) {
+                    symbols.add((Symbol) token);
+                    if (token.asSymbol() == '*') stars.add((Star) token);
                 }
             }
         }
+
 
         int part1 = 0;
         int part2 = 0;
 
-        for (int x = 0; x < schematic.getWidth(); x++) {
-            for (int y = 0; y < schematic.getHeight(); y++) {
-                Token token = schematic.getTokenAt(x, y);
-                if (token.isSymbol()) {
-                    System.out.printf("found symbol @ (%d, %d)\n", x, y);
-                    SchematicLocation[] surrounding = new SchematicLocation(x, y).getSurroundingPoints(schematic.getWidth(), schematic.getHeight());
-                    ArrayList<Integer> adjacentNumbers = new ArrayList<>();
+        for (Symbol symbol : symbols) {
+            NumberId[] surrounding = symbol.getSurroundingNumbers(schematic);
+            for (NumberId number : surrounding) {
+                if (usedNumbers.contains(number)) continue;
+                usedNumbers.add(number);
 
-                    for (SchematicLocation point : surrounding) {
-                        if (numbers.contains(point)) {
-                            Token tk = schematic.getTokenAt(point);
-                            SchematicLocation numberIdent = tk.getParts(schematic)[0];
-                            if (usedNumbers.contains(numberIdent)) continue;
-                            usedNumbers.add(numberIdent);
-
-                            int value = tk.asNumber(schematic);
-
-                            part1 += value;
-                            adjacentNumbers.add(value);
-                            System.out.printf("found number at (%d, %d)\n", point.getX(), point.getY());
-                        }
-                    }
-
-                    if (token.chr == '*' && adjacentNumbers.size() == 2) {
-                        part2 += adjacentNumbers.get(0) * adjacentNumbers.get(1);
-                    }
-                }
+                int value = number.getNum(schematic);
+                part1 += value;
             }
+        }
+
+        for (Star star : stars) {
+            part2 += star.value(schematic);
         }
 
         System.out.printf("Part 1: %d\n", part1);
         System.out.printf("Part 2: %d\n", part2);
     }
 }
+// Part 1: 539433
+// Part 2: 75847567
+
 
 class Schematic {
     private final Token[][] tokenized;
@@ -86,29 +62,26 @@ class Schematic {
         this.width = lines[0].length();
         this.height = lines.length;
 
-        this.tokenized = new Token[height][width];
-
-        for (int y = 0; y < height; y++) {
-            char[] chars = lines[y].toCharArray();
-            for (int x = 0; x < width; x++) {
-                char chr = chars[x];
-                if (chr >= '0' && chr <= '9') {
-                    tokenized[y][x] = new Number(x, y, chr);
-                } else if (chr == '.') {
-                    tokenized[y][x] = new Dot(x, y, chr);
-                } else {
-                    tokenized[y][x] = new Symbol(x, y, chr);
-                }
-            }
-        }
+        this.tokenized = Parser.parseLines(lines);
     }
 
     public Token getTokenAt(int x, int y) {
-        return tokenized[y][x];
+        if (0 <= x && x < width && 0 <= y && y < height) {
+            return tokenized[y][x];
+        } else {
+            return new Dot(x, y, '.');
+        }
     }
 
     public Token getTokenAt(SchematicLocation location) {
-        return tokenized[location.getY()][location.getX()];
+        int x = location.getX();
+        int y = location.getY();
+
+        if (0 <= x && x < width && 0 <= y && y < height) {
+            return tokenized[y][x];
+        } else {
+            return new Dot(x, y, '.');
+        }
     }
 
     public int getWidth() { return width; }
@@ -117,6 +90,11 @@ class Schematic {
 
 
 
+/**
+ * <h3>A token on a schematic.</h3>
+ * 
+ * <i>Also see: Symbol, Number, Dot</i>
+ */
 abstract class Token {
     protected int x;
     protected int y;
@@ -146,6 +124,12 @@ abstract class Token {
 
 
 
+/**
+ * <h3>A symbol on a schematic.</h3>
+ * <p>It represents a relevant, non-number symbol.</p>
+ * 
+ * <i>Also see: Star</i>
+ */
 class Symbol extends Token {
     public Symbol(int x, int y, char chr) {
         super(x, y, chr);
@@ -156,8 +140,26 @@ class Symbol extends Token {
 
     public char asSymbol() { return chr; }
     public int asNumber(Schematic s) { throw new ClassCastException("Token is not a number"); }
+
+    public NumberId[] getSurroundingNumbers(Schematic s) {
+        ArrayList<NumberId> numbers = new ArrayList<>();
+
+        for (SchematicLocation point : getParts(s)) {
+            for (SchematicLocation surrounding : point.getSurroundingPoints(s)) {
+                Token token = s.getTokenAt(surrounding);
+                if (token.isNumber()) numbers.add(new NumberId(surrounding.getX(), surrounding.getY()));
+            }
+        }
+
+        return numbers.toArray(new NumberId[numbers.size()]);
+    }
 }
 
+
+/**
+ * <h3>A number on a schematic.</h3>
+ * <p>It only contains a single digit, but the full number can be accessed with <code>asNumber</code></p>
+ */
 class Number extends Token {
     public Number(int x, int y, char chr) {
         super(x, y, chr);
@@ -176,48 +178,54 @@ class Number extends Token {
         return value;
     }
 
+    public NumberId getNumberId(Schematic s) {
+        return new NumberId(getParts(s)[0]);
+    }
+
     @Override
     public SchematicLocation[] getParts(Schematic s) {
         SchematicLocation leftmost = new SchematicLocation(x, y);
         SchematicLocation rightmost = new SchematicLocation(x, y);
 
-        // System.out.printf("number '%c' @ (%d, %d)\n", chr, x, y);
+        while (s.getTokenAt(leftmost.l()).isNumber()) leftmost = leftmost.l();
+        while (s.getTokenAt(rightmost.r()).isNumber()) rightmost = rightmost.r();
 
-        while (true) {
-            SchematicLocation toCheck = new SchematicLocation(leftmost.getX() - 1, leftmost.getY());
-            // System.out.printf("checking left (%d, %d)\n", toCheck.getX(), toCheck.getY());
+        int start = leftmost.getX();
+        int end = rightmost.getX();
 
-            if (toCheck.getX() < 0) break;
-
-            if (s.getTokenAt(toCheck).isNumber()) {
-                leftmost = toCheck;
-            } else {
-                break;
-            }
+        SchematicLocation[] points = new SchematicLocation[end - start + 1];
+        for (int x = start; x <= end; x++) {
+            points[x - start] = new SchematicLocation(x, y);
         }
 
-        while (true) {
-            SchematicLocation toCheck = new SchematicLocation(rightmost.getX() + 1, rightmost.getY());
-            // System.out.printf("checking right (%d, %d)\n", toCheck.getX(), toCheck.getY());
-            if (toCheck.getX() >= s.getWidth()) break;
-
-            if (s.getTokenAt(toCheck).isNumber()) {
-                rightmost = toCheck;
-            } else {
-                break;
-            }
-        }
-
-        ArrayList<SchematicLocation> points = new ArrayList<>();
-
-        for (int x = leftmost.getX(); x <= rightmost.getX(); x++) {
-            points.add(new SchematicLocation(x, y));
-        }
-
-        return points.toArray(new SchematicLocation[points.size()]);
+        return points;
     }
 }
 
+/**
+ * <h3>A special case of a symbol. (a possible "gear")</h3>
+ */
+class Star extends Symbol {
+    public Star(int x, int y) {
+        super(x, y, '*');
+    }
+
+    public int value(Schematic s) {
+        NumberId[] surrounding = getSurroundingNumbers(s);
+        if (surrounding.length == 2) {
+            return surrounding[0].getNum(s) * surrounding[1].getNum(s);
+        } else {
+            return 0;
+        }
+    }
+}
+
+
+
+/**
+ * <h3>A dot on a schematic.</h3>
+ * <p>It represents nothing!</p>
+ */
 class Dot extends Token {
     public Dot(int x, int y, char chr) {
         super(x, y, chr);
@@ -231,9 +239,26 @@ class Dot extends Token {
 }
 
 
+
+
+
+/**
+ * <h3>
+ *  Represents a location on a schematic (cartesian based).
+ * </h3>
+ * 
+ * <em>Note:</em> This class is immutable, and it supports `equals` and
+ * `hashCode` for use in hash sets.
+ * 
+ * <p>Methods:</p>
+ * <ul>
+ *  <li><code>u</code>, <code>d</code>, <code>l</code>, <code>r</code> — return the location one step in that direction</li>
+ *  <li><code>getSurroundingPoints</code> — return an array of all points surrounding this one</li>
+ * </ul>
+ */
 class SchematicLocation {
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
 
     public SchematicLocation(int x, int y) {
         this.x = x;
@@ -243,17 +268,26 @@ class SchematicLocation {
     public int getX() { return x; }
     public int getY() { return y; }
 
-    public SchematicLocation[] getSurroundingPoints(int width, int height) {
+
+    /**
+     * <h3>An array of all points surrounding this one.</h3>
+     * 
+     * <p>The schematic is required so it doesn't return out-of-bounds points.</p>
+     * 
+     * @param s
+     * @return an array of in-bounds all points surrounding this one
+     */
+    public SchematicLocation[] getSurroundingPoints(Schematic s) {
         ArrayList<SchematicLocation> points = new ArrayList<>();
 
-        for (int x = -1; x <= 1; x++) {
-            for (int y = -1; y <= 1; y++) {
+        for (int x : javautils.Utils.rangeInclusive(-1, 1)) {
+            for (int y : javautils.Utils.rangeInclusive(-1, 1)) {
                 if (x == 0 && y == 0) continue;
 
                 int newX = this.x + x;
                 int newY = this.y + y;
 
-                if (0 <= newX && newX < width && 0 <= newY && newY < height) {
+                if (Utils.inRange(newX, s.getWidth()) && Utils.inRange(newY, s.getHeight())) {
                     points.add(new SchematicLocation(newX, newY));
                 }
             }
@@ -262,6 +296,8 @@ class SchematicLocation {
         return points.toArray(new SchematicLocation[points.size()]);
     }
 
+
+    @Override
     public boolean equals(Object o) {
         if (o == this) return true;
 
@@ -271,8 +307,63 @@ class SchematicLocation {
         return x == other.getX() && y == other.getY();
     }
 
-
+    @Override
     public int hashCode() {
         return x * 5623 + y * 5869;
     }
+
+
+    /** @return a new location one step up */
+    public SchematicLocation u() { return new SchematicLocation(x, y - 1); }
+
+    /** @return a new location one step down */
+    public SchematicLocation d() { return new SchematicLocation(x, y + 1); }
+
+    /** @return a new location one step left */
+    public SchematicLocation l() { return new SchematicLocation(x - 1, y); }
+
+    /** @return a new location one step right */
+    public SchematicLocation r() { return new SchematicLocation(x + 1, y); }
 }
+
+/**
+ * <h3>A location on a schematic that contains the leftmost digit a number.</h3>
+ */
+class NumberId extends SchematicLocation {
+    public NumberId(SchematicLocation location) {
+        super(location.getX(), location.getY());
+    }
+
+    public NumberId(int x, int y) {
+        super(x, y);
+    }
+
+    public int getNum(Schematic s) {
+        return s.getTokenAt(this).asNumber(s);
+    }
+}
+
+abstract class Parser {
+    public static Token parseToken(char chr, int x, int y) {
+        if (chr >= '0' && chr <= '9') {
+            return new Number(x, y, chr);
+        } else if (chr == '.') {
+            return new Dot(x, y, chr);
+        } else if (chr == '*') {
+            return new Star(x, y);
+        } else {
+            return new Symbol(x, y, chr);
+        }
+    }
+
+    public static Token[][] parseLines(String[] lines) {
+        return Utils.Parser.byChars(
+            lines,
+            (coords, chr) -> parseToken((char) chr.intValue(), coords.getX(), coords.getY()),
+            Token[]::new,
+            Token[][]::new
+        );
+    }
+}
+
+
