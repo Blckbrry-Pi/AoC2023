@@ -65,8 +65,8 @@ impl Token {
     fn surrounding_numbers(&self, schematic: &Schematic) -> Vec<(usize, usize)> {
         let mut nums = std::collections::HashSet::new();
 
-        for x in (self.1.0 - 1)..=(self.1.0 + 1) {
-            for y in (self.1.1 - 1)..=(self.1.1 + 1) {
+        for x in (self.1.0.saturating_sub(1))..=(self.1.0 + 1).min(schematic.width - 1) {
+            for y in (self.1.1.saturating_sub(1))..=(self.1.1 + 1).min(schematic.height - 1) {
                 if schematic.get(x, y).is_num() {
                     nums.insert(schematic.get(x, y).num_id(schematic));
                 }
@@ -91,6 +91,7 @@ impl From<(char, (usize, usize))> for Token {
 
 struct Schematic {
     width: usize,
+    height: usize,
     data: Vec<Vec<Token>>
 }
 
@@ -108,6 +109,7 @@ impl Schematic {
             .collect();
         Schematic {
             width: data[0].len(),
+            height: data.len(),
             data,
         }
     }
