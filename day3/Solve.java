@@ -16,12 +16,13 @@ public class Solve {
         HashSet<Symbol> symbols = new HashSet<>();
         HashSet<Star> stars = new HashSet<>();
 
-        for (int x : javautils.Utils.range(0, schematic.getWidth())) {
-            for (int y : javautils.Utils.range(0, schematic.getHeight())) {
+        for (int y : javautils.Utils.range(0, schematic.getHeight())) {
+            for (int x : javautils.Utils.range(0, schematic.getWidth())) {
                 Token token = schematic.getTokenAt(x, y);
                 if (token.isSymbol()) {
                     symbols.add((Symbol) token);
-                    if (token.asSymbol() == '*') stars.add((Star) token);
+
+                    if (token instanceof Star) stars.add((Star) token);
                 }
             }
         }
@@ -49,8 +50,6 @@ public class Solve {
         System.out.printf("Part 2: %d\n", part2);
     }
 }
-// Part 1: 539433
-// Part 2: 75847567
 
 
 class Schematic {
@@ -69,7 +68,7 @@ class Schematic {
         if (0 <= x && x < width && 0 <= y && y < height) {
             return tokenized[y][x];
         } else {
-            return new Dot(x, y, '.');
+            return new Dot(x, y);
         }
     }
 
@@ -80,7 +79,7 @@ class Schematic {
         if (0 <= x && x < width && 0 <= y && y < height) {
             return tokenized[y][x];
         } else {
-            return new Dot(x, y, '.');
+            return new Dot(x, y);
         }
     }
 
@@ -142,12 +141,15 @@ class Symbol extends Token {
     public int asNumber(Schematic s) { throw new ClassCastException("Token is not a number"); }
 
     public NumberId[] getSurroundingNumbers(Schematic s) {
-        ArrayList<NumberId> numbers = new ArrayList<>();
+        HashSet<NumberId> numbers = new HashSet<>();
 
         for (SchematicLocation point : getParts(s)) {
             for (SchematicLocation surrounding : point.getSurroundingPoints(s)) {
                 Token token = s.getTokenAt(surrounding);
-                if (token.isNumber()) numbers.add(new NumberId(surrounding.getX(), surrounding.getY()));
+                if (!token.isNumber()) continue;
+
+                Number num = (Number) token;
+                numbers.add(num.getNumberId(s));
             }
         }
 
@@ -227,8 +229,8 @@ class Star extends Symbol {
  * <p>It represents nothing!</p>
  */
 class Dot extends Token {
-    public Dot(int x, int y, char chr) {
-        super(x, y, chr);
+    public Dot(int x, int y) {
+        super(x, y, '.');
     }
 
     public boolean isSymbol() { return false; }
@@ -341,14 +343,33 @@ class NumberId extends SchematicLocation {
     public int getNum(Schematic s) {
         return s.getTokenAt(this).asNumber(s);
     }
+
+    public String toString() {
+        return String.format("NumberId(%d, %d)", getX(), getY());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+
+        if (!(o instanceof NumberId)) return false;
+        NumberId other = (NumberId) o;
+
+        return getX() == other.getX() && getY() == other.getY();
+    }
+
+    @Override
+    public int hashCode() {
+        return getX() * 5623 + getY() * 5869;
+    }
 }
 
 abstract class Parser {
     public static Token parseToken(char chr, int x, int y) {
-        if (chr >= '0' && chr <= '9') {
+        if ('0' <= chr && chr <= '9') {
             return new Number(x, y, chr);
         } else if (chr == '.') {
-            return new Dot(x, y, chr);
+            return new Dot(x, y);
         } else if (chr == '*') {
             return new Star(x, y);
         } else {

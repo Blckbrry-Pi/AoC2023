@@ -96,7 +96,7 @@ public final class Utils {
         ArrayList<String> lines = new ArrayList<>();
 
         try {
-            File inputFile = new File("./day3/input.txt");
+            File inputFile = new File(filename);
             Scanner inputFileReader = new Scanner(inputFile);
             while (inputFileReader.hasNextLine()) {
                 lines.add(inputFileReader.nextLine());
