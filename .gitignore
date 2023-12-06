@@ -1,5 +1,15 @@
+# MacOS
 .DS_Store
-node_modules
 
+# Deps
+node_modules
+**/Cargo.lock
+
+# Test and input files
 **/input.txt
 **/test.txt
+
+# Build artifacts
+/target
+/Solve
+/solve
