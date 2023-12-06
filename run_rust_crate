@@ -1,4 +1,4 @@
 #!/bin/zsh
 
-cargo run --release $1
+cargo run --bin $1 --release $1
 rm -r target
