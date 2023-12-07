@@ -112,21 +112,21 @@ impl Mapper {
 
     pub fn possibilities(&self, ranges: &[IdRange]) -> Vec<IdRange> {
         let ranges = ranges.to_vec();
-        println!("seed: {ranges:#?}");
+        // println!("seed: {ranges:#?}");
         let ranges = self.get_ranges_one_step(&ranges, &self.seed_to_soil);
-        println!("soil: {ranges:#?}");
+        // println!("soil: {ranges:#?}");
         let ranges = self.get_ranges_one_step(&ranges, &self.soil_to_fert);
-        println!("fert: {ranges:#?}");
+        // println!("fert: {ranges:#?}");
         let ranges = self.get_ranges_one_step(&ranges, &self.fert_to_watr);
-        println!("watr: {ranges:#?}");
+        // println!("watr: {ranges:#?}");
         let ranges = self.get_ranges_one_step(&ranges, &self.watr_to_lite);
-        println!("lite: {ranges:#?}");
+        // println!("lite: {ranges:#?}");
         let ranges = self.get_ranges_one_step(&ranges, &self.lite_to_temp);
-        println!("temp: {ranges:#?}");
+        // println!("temp: {ranges:#?}");
         let ranges = self.get_ranges_one_step(&ranges, &self.temp_to_humd);
-        println!("humd: {ranges:#?}");
+        // println!("humd: {ranges:#?}");
         let ranges = self.get_ranges_one_step(&ranges, &self.humd_to_loc8);
-        println!("loc8: {ranges:#?}");
+        // println!("loc8: {ranges:#?}");
 
         ranges
     }

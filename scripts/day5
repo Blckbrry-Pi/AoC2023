@@ -1,0 +1,7 @@
+#!/bin/zsh
+echo "--------Day 05--------"
+echo 
+
+echo "Rust"
+./run_rust_crate day5
+echo

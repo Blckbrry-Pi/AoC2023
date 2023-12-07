@@ -1,0 +1,11 @@
+#!/bin/zsh
+echo "--------Day 06--------"
+echo 
+
+echo "Rust"
+./run_rust_crate day6
+echo
+
+echo "Typescript"
+npx ts-node day6/solve.ts
+echo

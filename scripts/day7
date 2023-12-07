@@ -1,0 +1,11 @@
+#!/bin/zsh
+echo "--------Day 07--------"
+echo 
+
+echo "Python"
+python3 day7/solve.py
+echo
+
+echo "Rust"
+./run_rust_crate day7
+echo
