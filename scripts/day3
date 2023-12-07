@@ -1,0 +1,11 @@
+#!/bin/zsh
+echo "--------Day 03--------"
+echo 
+
+echo "Java"
+./run_java_file day3/Solve.java 
+echo
+
+echo "Rust"
+./run_rust_file day3/solve.rs
+echo

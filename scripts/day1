@@ -29,4 +29,3 @@ echo
 echo "Typescript"
 npx ts-node day1/solve.ts
 echo
-

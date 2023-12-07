@@ -1,0 +1,11 @@
+#!/bin/zsh
+echo "--------Day 04--------"
+echo 
+
+echo "C"
+./run_c_file day4/solve.c
+echo
+
+echo "Rust"
+./run_rust_file day4/solve.rs
+echo
