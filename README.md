@@ -30,3 +30,12 @@ first!
 - [ ] Day 7: [Rust](https://www.rust-lang.org)
   - [ ] Part 1
   - [ ] Part 2
+
+Actual solves:
+- [x] Day 1: Go
+- [x] Day 2: C#
+- [x] Day 3: Java
+- [x] Day 4: C
+- [x] Day 5: Rust
+- [x] Day 6: Typescript
+- [ ] Day 7: Python
