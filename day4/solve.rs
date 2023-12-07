@@ -94,8 +94,7 @@ fn main() {
 
     let games: Vec<_> = input.lines().map(|s| Game::parse(&s)).collect();
 
-    let mut part1 = 0;
-    let mut part2 = 0;
+    let mut part1: u32 = 0;
 
     let mut totals = vec![1; games.len()];
 
@@ -106,39 +105,7 @@ fn main() {
         }
     }
 
-    part2 = totals.into_iter().sum();
-    // let mut symbols = vec![];
-    // for line in &schematic.data {
-    //     for token in line {
-    //         let token = *token;
-    //         if token.is_symbol() {
-    //             symbols.push(token);
-    //         }
-    //     }
-    // }
-
-    // let mut part1 = 0;
-    // let mut part2 = 0;
-
-    // let mut used_numbers = std::collections::HashSet::new();
-
-    // for symbol in symbols {
-    //     let nums = symbol.surrounding_numbers(&schematic);
-    //     for number in nums.iter().copied() {
-    //         if !used_numbers.contains(&number) {
-    //             used_numbers.insert(number);
-
-    //             part1 += schematic.get(number.0, number.1).num_val(&schematic);
-    //         }
-    //     }
-    //     if nums.len() == 2 && symbol.is_gear() {
-    //         let num0 = schematic.get(nums[0].0, nums[0].1).num_val(&schematic);
-    //         let num1 = schematic.get(nums[1].0, nums[1].1).num_val(&schematic);
-
-    //         part2 += num0 * num1;
-    //     }
-    // }
-    
+    let part2: u32 = totals.into_iter().sum();
 
     println!("Part 1: {part1}");
     println!("Part 2: {part2}");
