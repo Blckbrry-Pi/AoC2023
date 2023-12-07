@@ -5,7 +5,6 @@ import java.util.HashSet;
 
 import javautils.Utils;
 
-// FIXME: Self-explanatory
 public class Solve {
     public static void main(String[] args) {
         String[] lines = javautils.Utils.fileLines("day3/input.txt");

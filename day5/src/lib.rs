@@ -128,6 +128,7 @@ impl Mapper {
         let ranges = self.get_ranges_one_step(&ranges, &self.humd_to_loc8);
         // println!("loc8: {ranges:#?}");
 
+        #[allow(clippy::let_and_return)]
         ranges
     }
 }
