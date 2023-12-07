@@ -1,6 +1,13 @@
 #!/bin/zsh
-echo "--------Day 07--------"
-echo 
+echo -e "\x1b[107m\x1b[1m\x1b[30m"
+echo '     _____       ___                    ______     _____ '
+echo '    /     \     /   |   \    /         /      |        / '
+echo '   /      |    /    |    \  /         /      /        /  '
+echo '  /      /    /_____|     \/         /      /     ---/   '
+echo ' /      /    /      |     /         /      /        /    '
+echo '/____.-^    /       |    /         |______/        /     '
+echo -e '\n\x1b[0m'
+echo
 
 echo "Python"
 python3 day7/solve.py

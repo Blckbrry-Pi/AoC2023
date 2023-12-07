@@ -1,6 +1,13 @@
 #!/bin/zsh
-echo "--------Day 04--------"
-echo 
+echo -e "\x1b[107m\x1b[1m\x1b[30m"
+echo '     _____       ___                    ______           '
+echo '    /     \     /   |   \    /         /      |   /    / '
+echo '   /      |    /    |    \  /         /      /   /    /  '
+echo '  /      /    /_____|     \/         /      /   *----/   '
+echo ' /      /    /      |     /         /      /        /    '
+echo '/____.-^    /       |    /         |______/        /     '
+echo -e '\n\x1b[0m'
+echo
 
 echo "C"
 ./run_c_file day4/solve.c
