@@ -38,4 +38,4 @@ Actual solves:
 - [x] Day 4: C
 - [x] Day 5: Rust
 - [x] Day 6: Typescript
-- [ ] Day 7: Python
+- [x] Day 7: Python
