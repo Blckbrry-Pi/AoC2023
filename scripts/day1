@@ -1,20 +1,21 @@
 #!/bin/zsh
-echo -e "\x1b[107m\x1b[1m\x1b[30m"
+echo -e "\x1b[1m"
 echo '     _____       ___                    ______      ___  '
 echo '    /     \     /   |   \    /         /      |       /  '
 echo '   /      |    /    |    \  /         /      /       /   '
 echo '  /      /    /_____|     \/         /      /       /    '
 echo ' /      /    /      |     /         /      /       /     '
 echo '/____.-^    /       |    /         |______/    ___/___   '
-echo -e '\n\x1b[0m'
+echo '                                                         '
+echo -en '\x1b[0m'
 echo
 
 echo "C"
-./run_c_file day1/solve.c
+./scripts/run/c_file day1/solve.c
 echo
 
 echo "C#"
-./run_c#_file day1/Solve.cs
+./scripts/run/c#_file day1/Solve.cs
 echo
 
 echo "Go"
@@ -30,7 +31,7 @@ python3 day1/solve.py
 echo
 
 echo "Rust"
-./run_rust_file day1/solve.rs
+./scripts/run/rust_file day1/solve.rs
 echo
 
 echo "Typescript"

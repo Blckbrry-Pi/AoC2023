@@ -1,20 +1,21 @@
 #!/bin/zsh
-echo -e "\x1b[107m\x1b[1m\x1b[30m"
+echo -e "\x1b[1m"
 echo '     _____       ___                    ______      ___  '
 echo '    /     \     /   |   \    /         /      |   /    | '
 echo '   /      |    /    |    \  /         /      /        /  '
 echo '  /      /    /_____|     \/         /      /       _"   '
 echo ' /      /    /      |     /         /      /      -"     '
 echo '/____.-^    /       |    /         |______/    _-_____   '
-echo -e '\n\x1b[0m'
+echo '                                                         '
+echo -en '\x1b[0m'
 echo
 
 echo "C"
-./run_c_file day2/solve.c
+./scripts/run/c_file day2/solve.c
 echo
 
 echo "C#"
-./run_c#_file day2/Solve.cs
+./scripts/run/c#_file day2/Solve.cs
 echo
 
 echo "Python"

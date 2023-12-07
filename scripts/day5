@@ -1,14 +1,15 @@
 #!/bin/zsh
-echo -e "\x1b[107m\x1b[1m\x1b[30m"
+echo -e "\x1b[1m"
 echo '     _____       ___                    ______     _____ '
 echo '    /     \     /   |   \    /         /      |   /      '
 echo '   /      |    /    |    \  /         /      /   /       '
 echo '  /      /    /_____|     \/         /      /   *----*   '
 echo ' /      /    /      |     /         /      /        /    '
 echo '/____.-^    /       |    /         |______/   _____/     '
-echo -e '\n\x1b[0m'
+echo '                                                         '
+echo -en '\x1b[0m'
 echo
 
 echo "Rust"
-./run_rust_crate day5
+./scripts/run/rust_crate day5
 echo
