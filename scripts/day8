@@ -13,3 +13,7 @@ echo
 echo "Rust"
 ./scripts/run/rust_crate day8
 echo
+
+echo "Typescript"
+/usr/bin/time -h npx ts-node day8/solve.ts
+echo
