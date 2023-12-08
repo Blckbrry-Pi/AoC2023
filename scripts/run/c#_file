@@ -2,4 +2,4 @@
 
 OUTPUT_FILE_NAME=$(basename $1 .cs)
 
-csc -noLogo -out:$OUTPUT_FILE_NAME $1 && mono $OUTPUT_FILE_NAME && rm $OUTPUT_FILE_NAME
+csc -noLogo -out:$OUTPUT_FILE_NAME $1 && /usr/bin/time -h mono $OUTPUT_FILE_NAME && rm $OUTPUT_FILE_NAME

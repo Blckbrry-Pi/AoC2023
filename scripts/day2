@@ -19,5 +19,5 @@ echo "C#"
 echo
 
 echo "Python"
-python3 day2/solve.py
+/usr/bin/time -h python3 day2/solve.py
 echo

@@ -1,4 +1,7 @@
 #!/bin/zsh
 
-cargo run --bin $1 -q --release $1
+cargo build -q --release
+
+/usr/bin/time -h cargo run --bin $1 -q --release $1
+
 rm -r target

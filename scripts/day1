@@ -19,15 +19,15 @@ echo "C#"
 echo
 
 echo "Go"
-go run day1/solve.go
+/usr/bin/time -h go run day1/solve.go
 echo 
 
 echo "Java"
-java day1/Solve.java
+/usr/bin/time -h java day1/Solve.java
 echo
 
 echo "Python"
-python3 day1/solve.py
+/usr/bin/time -h python3 day1/solve.py
 echo
 
 echo "Rust"
@@ -35,5 +35,5 @@ echo "Rust"
 echo
 
 echo "Typescript"
-npx ts-node day1/solve.ts
+/usr/bin/time -h npx ts-node day1/solve.ts
 echo

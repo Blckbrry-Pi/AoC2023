@@ -15,5 +15,5 @@ echo "Rust"
 echo
 
 echo "Typescript"
-npx ts-node day6/solve.ts
+/usr/bin/time -h npx ts-node day6/solve.ts
 echo

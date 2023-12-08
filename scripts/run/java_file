@@ -3,5 +3,5 @@
 BASE_NAME="${1%.java}"
 
 javac -d artifacts javautils/* $1
-java -cp artifacts $BASE_NAME
+/usr/bin/time -h java -cp artifacts $BASE_NAME
 rm -rf artifacts
