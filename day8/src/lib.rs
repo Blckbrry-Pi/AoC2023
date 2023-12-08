@@ -2,6 +2,7 @@ pub mod ident;
 pub mod node;
 pub mod direction;
 pub mod state;
+pub mod cycle;
 
 use std::collections::HashMap;
 

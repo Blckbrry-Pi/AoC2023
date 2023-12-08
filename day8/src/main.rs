@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 use day8::Map;
+use day8::cycle::Cycle;
 use day8::direction::Directions;
 use day8::ident::Ident;
 use day8::state::State;
@@ -19,42 +20,27 @@ fn lcm(a: usize, b: usize) -> usize {
     a * b / gcd(a, b)
 }
 
-fn main() {
-    let input = std::fs::read_to_string("./day8/input.txt")
-    // let input = std::fs::read_to_string("./day8/test.txt")
-        .expect("Couldn't read the input file");
 
-    let directions = Directions::parse(input.split_once('\n').unwrap().0).unwrap();
-    let mut map = Map::default();
-
-    input.lines().skip(2).map(|line| map.add_line(line)).collect::<Option<Vec<_>>>().unwrap();
-
-    let mut final_steps_p1 = None;
+fn part_1(map: &Map, directions: &Directions) -> usize {
     let mut curr = map.start;
     for (steps, direction) in directions.clone().into_iter().enumerate() {
         curr = direction.access(&map.nodes[&curr]);
 
         if curr == Ident::ZZZ {
-            final_steps_p1 = Some(steps + 1);
-            break;
+            return steps + 1;
         }
     }
 
-    let mut final_steps_p2 = None;
-    let mut curr: Vec<_> = map.nodes
-        .keys()
-        .copied()
-        .filter(|ident| ident.last_char() == 'A')
-        .collect();
+    unreachable!()
+}
 
-    curr.sort();
-
-
+fn get_cycles(map: &Map, directions: &Directions, values: Vec<Ident>) -> Vec<Cycle> {
+    let mut curr = values.clone();
 
     let mut z_seen: Vec<HashMap<State, usize>> = vec![HashMap::new(); curr.len()];
     let mut cycle_len: Vec<Option<usize>> = vec![None; curr.len()];
 
-    for (steps, (dir_idx, direction)) in directions.into_indexed_iter().enumerate() {
+    for (steps, (dir_idx, direction)) in directions.clone().into_indexed_iter().enumerate() {
 
         let part_iter = curr.iter().copied().zip(z_seen.iter_mut()).zip(cycle_len.iter_mut());
 
@@ -73,37 +59,60 @@ fn main() {
             *ident = direction.access(&map.nodes[&ident]);
         }
 
-        let count = curr.iter().copied().filter(|ident| ident.last_char() == 'Z').count();
-
-        if count == curr.len() {
-            final_steps_p2 = Some(steps + 1);
-            break;
-        }
-
         if cycle_len.iter().all(Option::is_some) {
             break;
         }
     }
 
-    if final_steps_p2.is_none() {
-        let mut curr_val = *z_seen[0].values().next().unwrap();
-        let mut current_lcm = cycle_len[0].unwrap();
-        
-        for i in 1..curr.len() {
-            let val = z_seen[i].values().next().unwrap();
-            let len = cycle_len[i].unwrap();
-
-            while curr_val % len != val % len {
-                curr_val += current_lcm;
+    cycle_len.into_iter()
+        .zip(z_seen)
+        .map(|(cycle, map)| {
+            Cycle {
+                offset: *map.values().next().unwrap(),
+                length: cycle.unwrap()
             }
+        })
+        .collect()
+}
 
-            current_lcm = lcm(current_lcm, len);
+fn get_cycle_sync(cycles: &[Cycle]) -> usize {
+    let mut curr_val = cycles[0].offset;
+    let mut current_lcm = cycles[0].length;
+    
+    for cycle in cycles.iter().copied().skip(1) {
+        while curr_val % cycle.length != cycle.offset % cycle.length {
+            curr_val += current_lcm;
         }
 
-
-        final_steps_p2 = Some(curr_val);
+        current_lcm = lcm(current_lcm, cycle.length);
     }
 
-    println!("Part 1: {}", final_steps_p1.unwrap());
-    println!("Part 2: {}", final_steps_p2.unwrap());
+    curr_val
+}
+
+fn main() {
+    let input = std::fs::read_to_string("./day8/input.txt")
+        .expect("Couldn't read the input file");
+
+    let mut map = Map::default();
+
+    // Parse first line for directions.
+    let directions = Directions::parse(input.lines().next().unwrap()).unwrap();
+
+    // Parse 3rd to last lines and add them to the map.
+    input.lines().skip(2).try_for_each(|line| map.add_line(line).map(|_| ())).unwrap();
+
+    let part1 = part_1(&map, &directions);
+
+
+    let part2_idents: Vec<_> = map.nodes
+        .keys()
+        .copied()
+        .filter(|ident| ident.last_char() == 'A')
+        .collect();
+    let part2_cycles = get_cycles(&map, &directions, part2_idents);
+    let part2 = get_cycle_sync(&part2_cycles);
+
+    println!("Part 1: {part1}");
+    println!("Part 2: {part2}");
 }
