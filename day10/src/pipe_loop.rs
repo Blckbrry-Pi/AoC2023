@@ -38,8 +38,6 @@ impl Loop {
             to_check.extend(tile.get_connections(loc));
         }
 
-        println!();
-
         // If the loop connected to start twice, then we have a valid loop.
         if start_seen.len() >= 2 {
             let location_of_start = start_seen[0];
