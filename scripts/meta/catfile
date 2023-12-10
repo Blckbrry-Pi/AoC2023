@@ -1,0 +1,23 @@
+#!/bin/zsh
+
+COOKIE_FILE_NAME=".aoc_cookie_:3"
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 <day>"
+    exit 1
+fi
+if [ ! -f "./$COOKIE_FILE_NAME" ]; then
+    echo "No $COOKIE_FILE_NAME file found. Please create one before continuing."
+    return
+fi
+
+YEAR="$2"
+if [ -z "$YEAR" ]; then
+    YEAR=`TZ=America/New_York date +'%Y'`
+fi
+
+URL="https://adventofcode.com/$YEAR/day/$1/input"
+USER_AGENT="Automated Advent of Code Input Downloader That Definitely Wasn't Pirated From Anli's Thing (AACIDTDWPFAT)"
+COOKIE="session=$(cat ./$COOKIE_FILE_NAME)"
+
+curl -A $USER_AGENT --cookie $COOKIE -fs $URL

@@ -1,0 +1,28 @@
+#!/bin/zsh
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 <day>"
+    exit 1
+fi
+
+PADDED_DAY=$(printf "%02d" $1)
+NAME="day$PADDED_DAY"
+
+
+echo "Initializing day '$NAME'..."
+
+
+cargo init $NAME --bin
+echo "Created crate $NAME."
+
+cat ./scripts/meta/_main.rs | sed 's/\$\$DAY_NAME\$\$/'$NAME'/g' > $NAME/src/main.rs
+touch $NAME/src/lib.rs
+echo "Setup main.rs and lib.rs"
+
+touch $NAME/test.txt
+echo "Created test.txt"
+
+./scripts/meta/catfile $1 > $NAME/input.txt
+echo "Downloaded input.txt"
+
+echo "Done!"

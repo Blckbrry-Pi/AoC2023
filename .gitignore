@@ -13,3 +13,5 @@ node_modules
 /target
 /Solve
 /solve
+
+.aoc_cookie_:3
