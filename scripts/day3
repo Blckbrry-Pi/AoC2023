@@ -11,9 +11,9 @@ echo -en '\x1b[0m'
 echo
 
 echo "Java"
-./scripts/run/java_file day3/Solve.java 
+./scripts/run/java_file day03/Solve.java 
 echo
 
 echo "Rust"
-./scripts/run/rust_file day3/solve.rs
+./scripts/run/rust_file day03/solve.rs
 echo

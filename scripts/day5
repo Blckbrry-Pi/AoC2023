@@ -11,5 +11,5 @@ echo -en '\x1b[0m'
 echo
 
 echo "Rust"
-./scripts/run/rust_crate day5
+./scripts/run/rust_crate day05
 echo

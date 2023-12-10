@@ -11,9 +11,9 @@ echo -en '\x1b[0m'
 echo
 
 echo "C"
-./scripts/run/c_file day4/solve.c
+./scripts/run/c_file day04/solve.c
 echo
 
 echo "Rust"
-./scripts/run/rust_file day4/solve.rs
+./scripts/run/rust_file day04/solve.rs
 echo

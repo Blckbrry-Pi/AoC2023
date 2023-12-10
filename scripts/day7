@@ -11,9 +11,9 @@ echo -en '\x1b[0m'
 echo
 
 echo "Python"
-/usr/bin/time -h python3 day7/solve.py
+/usr/bin/time -h python3 day07/solve.py
 echo
 
 echo "Rust"
-./scripts/run/rust_crate day7
+./scripts/run/rust_crate day07
 echo

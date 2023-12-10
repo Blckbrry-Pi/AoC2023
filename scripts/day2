@@ -11,13 +11,13 @@ echo -en '\x1b[0m'
 echo
 
 echo "C"
-./scripts/run/c_file day2/solve.c
+./scripts/run/c_file day02/solve.c
 echo
 
 echo "C#"
-./scripts/run/c#_file day2/Solve.cs
+./scripts/run/c#_file day02/Solve.cs
 echo
 
 echo "Python"
-/usr/bin/time -h python3 day2/solve.py
+/usr/bin/time -h python3 day02/solve.py
 echo

@@ -11,9 +11,9 @@ echo -en '\x1b[0m'
 echo
 
 echo "Rust"
-./scripts/run/rust_crate day6
+./scripts/run/rust_crate day06
 echo
 
 echo "Typescript"
-/usr/bin/time -h npx ts-node day6/solve.ts
+/usr/bin/time -h npx ts-node day06/solve.ts
 echo
