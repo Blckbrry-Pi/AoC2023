@@ -44,3 +44,60 @@ to be able to look back on it and understand what the hell I was thinking.
 - Cleanup
 - Comments
 - Whatever other fun things I decide to do that day!
+
+
+## Day-by-day results:
+- [x] Day 01: C, C#, Go, Java, Python, Rust, Typescript
+  - [x] Part 1
+  - [x] Part 2
+  - [x] Scripts
+  - [ ] Cleanup
+  - [ ] Comments
+- [ ] Day 02: C, C#, Python
+  - [x] Part 1
+  - [x] Part 2
+  - [x] Scripts
+  - [ ] Cleanup
+  - [ ] Comments
+- [ ] Day 03: Java, Rust
+  - [x] Part 1
+  - [x] Part 2
+  - [x] Scripts
+  - [ ] Cleanup
+  - [ ] Comments
+- [ ] Day 04: C, Rust
+  - [x] Part 1
+  - [x] Part 2
+  - [x] Scripts
+  - [ ] Cleanup
+  - [ ] Comments
+- [ ] Day 05: Rust
+  - [x] Part 1
+  - [x] Part 2
+  - [x] Scripts
+  - [ ] Cleanup
+  - [ ] Comments
+- [ ] Day 06: Rust, Typescript
+  - [x] Part 1
+  - [x] Part 2
+  - [x] Scripts
+  - [ ] Cleanup
+  - [ ] Comments
+- [ ] Day 07: Python, Rust
+  - [x] Part 1
+  - [x] Part 2
+  - [x] Scripts
+  - [ ] Cleanup
+  - [ ] Comments
+- [ ] Day 08: Rust
+  - [x] Part 1
+  - [x] Part 2
+  - [x] Scripts
+  - [ ] Cleanup
+  - [ ] Comments
+- [ ] Day 09: Rust
+  - [x] Part 1
+  - [x] Part 2
+  - [x] Scripts
+  - [ ] Cleanup
+  - [ ] Comments

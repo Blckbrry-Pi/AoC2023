@@ -25,4 +25,14 @@ echo "Created test.txt"
 ./scripts/meta/catfile $1 > $NAME/input.txt
 echo "Downloaded input.txt"
 
+
+echo "- [ ] Day $PADDED_DAY:\
+  - [ ] Part 1
+  - [ ] Part 2
+  - [ ] Scripts
+  - [ ] Cleanup
+  - [ ] Comments
+" >> README.md
+echo "Updated README"
+
 echo "Done!"
