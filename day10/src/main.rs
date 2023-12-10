@@ -18,11 +18,9 @@ fn main() {
 
     let part1 = pipe_loop.size() / 2;
     let part2 = map.location_iter()
-        .filter(|&loc| pipe_loop.inside_pipe_loop(loc, map.tiles[0].len()))
+        .filter(|&loc| pipe_loop.inside_pipe_loop(loc, map.width()))
         .count();
 
-
-    println!("{:?}", pipe_loop.debug_with_map(&map));
 
     println!("Part 1: {part1}");
     println!("Part 2: {part2}");

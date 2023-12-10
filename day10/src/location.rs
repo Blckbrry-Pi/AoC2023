@@ -50,3 +50,34 @@ impl PartialOrd for Location {
         Some(self.cmp(other))
     }
 }
+
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+pub enum Direction {
+    Above = 0,
+    Below = 1,
+    Left = 2,
+    Right = 3,
+}
+
+impl Direction {
+    pub fn opposite(&self) -> Self {
+        match self {
+            Self::Above => Self::Below,
+            Self::Below => Self::Above,
+            Self::Left => Self::Right,
+            Self::Right => Self::Left,
+        }
+    }
+
+    pub fn from_locations(this: Location, relative_to: Location) -> Self {
+        match (this.x.cmp(&relative_to.x), this.y.cmp(&relative_to.y)) {
+            (std::cmp::Ordering::Equal, std::cmp::Ordering::Less) => Self::Above,
+            (std::cmp::Ordering::Equal, std::cmp::Ordering::Greater) => Self::Below,
+            (std::cmp::Ordering::Less, std::cmp::Ordering::Equal) => Self::Left,
+            (std::cmp::Ordering::Greater, std::cmp::Ordering::Equal) => Self::Right,
+            _ => panic!("Locations are not adjacent"),
+
+        }
+    }
+}

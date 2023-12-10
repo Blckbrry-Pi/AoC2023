@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use crate::location::Location;
+use crate::location::{Location, Direction};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum CornerType {
@@ -19,6 +19,8 @@ pub enum Tile {
     StartingPosition,
 }
 
+
+
 impl Tile {
     pub fn get_connections(&self, loc: Location) -> Vec<Location> {
         match self {
@@ -34,15 +36,51 @@ impl Tile {
             Tile::StartingPosition => vec![loc.up(), loc.left(), loc.right(), loc.down()],
         }
     }
+
+    pub fn from_directions(a: Direction, b: Direction) -> Self {
+        use Tile::*;
+        use crate::tile::CornerType::*;
+
+        // Simple sort so that the logic can be more compact.
+        let (a, b) = if a < b { (a, b) } else { (b, a) };
+
+        match (a, b) {
+            // Has above connection
+            (Direction::Above, Direction::Left) => Corner(TopLeft),
+            (Direction::Above, Direction::Right) => Corner(TopRight),
+            (Direction::Above, Direction::Below) => Vertical,
+
+            // Has left connection
+            (Direction::Left, Direction::Right) => Horizontal,
+            (Direction::Left, Direction::Below) => Corner(BottomLeft),
+
+            // Has right connection
+            _ => Corner(BottomRight),
+        }
+    }
+
+    pub fn connects(&self, at: Location, to: Location) -> bool {
+        self.get_connections(at).contains(&to)
+    }
 }
 
 impl Display for CornerType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let corner = match self {
-            CornerType::TopLeft => "J",
-            CornerType::TopRight => "L",
-            CornerType::BottomLeft => "7",
-            CornerType::BottomRight => "F",
+        
+        let corner = if f.alternate() {
+            match self {
+                CornerType::TopLeft => "╝",
+                CornerType::TopRight => "╚",
+                CornerType::BottomLeft => "╗",
+                CornerType::BottomRight => "╔",
+            }
+        }  else {
+            match self {
+                CornerType::TopLeft => "J",
+                CornerType::TopRight => "L",
+                CornerType::BottomLeft => "7",
+                CornerType::BottomRight => "F",
+            }
         };
         write!(f, "{}", corner)
     }
@@ -50,12 +88,22 @@ impl Display for CornerType {
 
 impl Display for Tile {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let tile = match self {
-            Tile::Vertical => "|",
-            Tile::Horizontal => "-",
-            Tile::Corner(corner) => return write!(f, "{corner}"),
-            Tile::Empty => " ",
-            Tile::StartingPosition => "S",
+        let tile = if f.alternate() {
+            match self {
+                Tile::Vertical => "║",
+                Tile::Horizontal => "═",
+                Tile::Corner(corner) => return corner.fmt(f),
+                Tile::Empty => " ",
+                Tile::StartingPosition => "╳",
+            }
+        } else {
+            match self {
+                Tile::Vertical => "|",
+                Tile::Horizontal => "-",
+                Tile::Corner(corner) => return corner.fmt(f),
+                Tile::Empty => " ",
+                Tile::StartingPosition => "S",
+            }
         };
         write!(f, "{}", tile)
     }

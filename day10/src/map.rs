@@ -58,16 +58,23 @@ impl Map {
     }
 
     pub fn in_bounds(&self, location: Location) -> bool {
-        let x_in_bounds = location.x < self.tiles[0].len();
-        let y_in_bounds = location.y < self.tiles.len();
-        x_in_bounds && y_in_bounds
+        location.x < self.width() && location.y < self.height()
     }
 
     pub fn location_iter(&self) -> impl Iterator<Item = Location> {
-        let width = self.tiles[0].len();
-        let height = self.tiles.len();
+        // Anli, this is literally the one time I had to fight the borrow
+        // checker, and  the solution was 1 simple line.
+        let height = self.height();
 
-        (0..width).flat_map(move |x| (0..height).map(move |y| Location { x, y }))
+        (0..self.width()).flat_map(move |x| (0..height).map(move |y| Location { x, y }))
+    }
+
+    pub fn width(&self) -> usize {
+        self.tiles[0].len()
+    }
+
+    pub fn height(&self) -> usize {
+        self.tiles.len()
     }
 }
 
