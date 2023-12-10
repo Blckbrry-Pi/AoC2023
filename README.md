@@ -99,5 +99,5 @@ to be able to look back on it and understand what the hell I was thinking.
   - [x] Part 1
   - [x] Part 2
   - [x] Scripts
-  - [ ] Cleanup
-  - [ ] Comments
+  - [x] Cleanup
+  - [x] Comments
