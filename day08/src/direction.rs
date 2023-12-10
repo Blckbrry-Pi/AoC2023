@@ -48,15 +48,10 @@ pub struct Directions {
 }
 
 impl Directions {
-    pub fn new() -> Self {
-        Self {
-            directions: vec![],
-        }
-    }
+    pub fn new() -> Self { Self { directions: vec![] } }
+
     pub fn parse(line: &str) -> Option<Self> {
-        Some(Self {
-            directions: line.chars().map(Direction::parse).collect::<Option<Vec<_>>>()?,
-        })
+        Some(Self { directions: line.chars().map(Direction::parse).collect::<Option<Vec<_>>>()? })
     }
 
     pub fn push(&mut self, direction: Direction) {
@@ -66,7 +61,6 @@ impl Directions {
     pub fn into_indexed_iter(self) -> IndexedDirectionsIter {
         IndexedDirectionsIter::new(self)
     }
-
 }
 
 impl Default for Directions {
@@ -93,17 +87,14 @@ impl std::iter::IntoIterator for Directions {
     }
 }
 
-pub struct DirectionsIter {
-    directions: Directions,
-    curr: usize,
-}
+
+
+
+pub struct DirectionsIter(IndexedDirectionsIter);
 
 impl DirectionsIter {
     fn new(directions: Directions) -> Self {
-        Self {
-            directions,
-            curr: 0,
-        }
+        Self(IndexedDirectionsIter::new(directions))
     }
 }
 
@@ -111,18 +102,9 @@ impl Iterator for DirectionsIter {
     type Item = Direction;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let direction = self.directions.directions.get(self.curr)?;
-
-        self.curr += 1;
-        if self.curr == self.directions.directions.len() {
-            self.curr = 0;
-        }
-
-        Some(*direction)
+        self.0.next().map(|(_, direction)| direction)
     }
 }
-
-
 
 
 

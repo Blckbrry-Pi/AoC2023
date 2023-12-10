@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use day08::Map;
+use day08::map::Map;
 use day08::cycle::Cycle;
 use day08::direction::Directions;
 use day08::ident::Ident;
