@@ -95,9 +95,16 @@ to be able to look back on it and understand what the hell I was thinking.
   - [x] Scripts
   - [ ] Cleanup
   - [ ] Comments
-- [ ] Day 09: Rust
+- [x] Day 09: Rust
   - [x] Part 1
   - [x] Part 2
   - [x] Scripts
   - [x] Cleanup
   - [x] Comments
+- [ ] Day 10: Rust
+  - [x] Part 1
+  - [x] Part 2
+  - [ ] Scripts
+  - [ ] Cleanup
+  - [ ] Comments
+
