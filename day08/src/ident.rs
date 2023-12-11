@@ -19,13 +19,18 @@ impl Ident {
         Self(chars[0] + chars[1] * MULT + chars[2] * MULT * MULT)
     }
 
-    pub fn last_char(self) -> char {
+    pub fn last_char(&self) -> char {
         ALPHABET.chars().nth(self.get_2()).unwrap()
     }
 
-    pub fn get_0(self) -> usize { self.0 % MULT }
-    pub fn get_1(self) -> usize { self.0 / MULT % MULT }
-    pub fn get_2(self) -> usize { self.0 / MULT / MULT % MULT }
+
+    pub fn end_a(&self) -> bool { self.last_char() == 'A' }
+    pub fn end_z(&self) -> bool { self.last_char() == 'Z' }
+    
+
+    pub fn get_0(&self) -> usize { self.0 % MULT }
+    pub fn get_1(&self) -> usize { self.0 / MULT % MULT }
+    pub fn get_2(&self) -> usize { self.0 / MULT / MULT % MULT }
 }
 
 impl std::fmt::Debug for Ident {

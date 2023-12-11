@@ -1,6 +1,7 @@
 pub mod ident;
 pub mod direction;
 pub mod map;
+pub mod cycles;
 
 
 const ALPHABET: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -11,26 +12,6 @@ pub mod cycle {
     pub struct Cycle {
         pub offset: usize,
         pub length: usize,
-    }
-}
-
-
-pub mod state {
-    use crate::ident::Ident;
-
-    #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-    pub struct State {
-        ident: Ident,
-        direction_index: usize,
-    }
-
-    impl State {
-        pub fn new(ident: Ident, direction_index: usize) -> Self {
-            Self {
-                ident,
-                direction_index,
-            }
-        }
     }
 }
 
