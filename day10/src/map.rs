@@ -3,24 +3,21 @@ use std::ops::Index;
 
 use crate::{tile::{ Tile, CornerType }, location::Location};
 
+/// A map of all of the pipe tiles.
+/// 
+/// Use:
+/// - [`Map::parse()`] to parse a map from the puzzle input.
+/// - [`Map::get_starting_location()`] to get the starting location of the map.
+/// - [`Map::in_bounds()`] to check if a location is within the bounds of the map.
+/// - [`Map::location_iter()`] to iterate through all locations in the map.
+/// - [`Map::width()`] and [`Map::height()`] to get the dimensions of the map.
 #[derive(Clone)]
 pub struct Map {
     pub tiles: Vec<Vec<Tile>>,
 }
 
-impl Debug for Map {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        for row in &self.tiles {
-            for tile in row {
-                write!(f, "{tile}")?;
-            }
-            writeln!(f)?;
-        }
-        Ok(())
-    }
-}
-
 impl Map {
+    /// Parses a map from a list of strings (the lines of the puzzle input).
     pub fn parse(lines: &[&str]) -> Self {
         let mut tiles = Vec::new();
 
@@ -46,6 +43,9 @@ impl Map {
         Self { tiles }
     }
 
+    /// Returns the starting location of the map.
+    /// 
+    /// Panics if no starting location is found.
     pub fn get_starting_location(&self) -> Location {
         for (y, row) in self.tiles.iter().enumerate() {
             for (x, tile) in row.iter().enumerate() {
@@ -57,10 +57,14 @@ impl Map {
         panic!("No starting location found");
     }
 
+    /// Returns true if the location is within the bounds of the map.
     pub fn in_bounds(&self, location: Location) -> bool {
         location.x < self.width() && location.y < self.height()
     }
 
+    /// Iterator through all locations in the map.
+    /// 
+    /// Top to bottom, left to right. ("reading order")
     pub fn location_iter(&self) -> impl Iterator<Item = Location> {
         // Anli, this is literally the one time I had to fight the borrow
         // checker, and  the solution was 1 simple line.
@@ -69,12 +73,26 @@ impl Map {
         (0..self.width()).flat_map(move |x| (0..height).map(move |y| Location { x, y }))
     }
 
+    /// Number of columns in the map
     pub fn width(&self) -> usize {
         self.tiles[0].len()
     }
 
+    /// Number of rows in the map
     pub fn height(&self) -> usize {
         self.tiles.len()
+    }
+}
+
+impl Debug for Map {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        for row in &self.tiles {
+            for tile in row {
+                write!(f, "{tile}")?;
+            }
+            writeln!(f)?;
+        }
+        Ok(())
     }
 }
 

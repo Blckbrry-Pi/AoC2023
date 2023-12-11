@@ -101,10 +101,10 @@ to be able to look back on it and understand what the hell I was thinking.
   - [x] Scripts
   - [x] Cleanup
   - [x] Comments
-- [ ] Day 10: Rust
+- [x] Day 10: Rust
   - [x] Part 1
   - [x] Part 2
   - [x] Scripts
   - [x] Cleanup
-  - [ ] Comments
+  - [x] Comments
 

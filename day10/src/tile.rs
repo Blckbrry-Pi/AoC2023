@@ -10,18 +10,41 @@ pub enum CornerType {
     BottomRight,
 }
 
+/// Represents a single tile in the map. (1 char in the puzzle input)
+/// 
+/// Variants:
+/// - [`Vectical`][`Tile::Vertical`]: Has connections up and down
+///     (Representedby `|`)
+/// - [`Horizontal`][`Tile::Horizontal`]: Has connections left and right
+///     (Represented by `-`)
+/// - [`Corner`][`Tile::Corner`]: Has connections in 2 directions
+///     (represented by `J`, `L`, `7`, and `F` \[see [`CornerType`][`crate::tile::CornerType`]\])
+/// - [`Empty`][`Tile::Empty`]: Has no connections (represented by `.`)
+/// - [`StartingPosition`][`Tile::StartingPosition`]: The starting position.
+///     See the variant for more info.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Tile {
+    /// Has connections up and down (Represented by `|`)
     Vertical,
+    /// Has connections left and right (Represented by `-`)
     Horizontal,
+    /// Has connections in 2 directions (represented by `J`, `L`, `7`, and `F` \[see [`CornerType`][`crate::tile::CornerType`]\])
     Corner(CornerType),
+    /// Has no connections (represented by `.`)
     Empty,
+    /// The starting position (represented by `S`)
+    /// (May have connections in any direction, but in practice 2.)
+    /// 
+    /// The tile at the starting position is not specified in the input file, so
+    /// [`Loops`][`crate::pipe_loop::Loop`] figures out what it represents on
+    /// the fly.
     StartingPosition,
 }
 
 
 
 impl Tile {
+    /// Get the locations that this tile connects to.
     pub fn get_connections(&self, loc: Location) -> Vec<Location> {
         match self {
             Tile::Vertical => vec![loc.up(), loc.down()],
@@ -37,6 +60,9 @@ impl Tile {
         }
     }
 
+    /// Given the 2 connections that this tile connects 2, return the
+    /// [`Horizontal`][Tile::Horizontal], [`Vertical`][Tile::Vertical], or
+    /// [`Corner`][Tile::Corner] variant that fits that description.
     pub fn from_directions(a: Direction, b: Direction) -> Self {
         use Tile::*;
         use crate::tile::CornerType::*;
@@ -46,19 +72,21 @@ impl Tile {
 
         match (a, b) {
             // Has above connection
-            (Direction::Above, Direction::Left) => Corner(TopLeft),
-            (Direction::Above, Direction::Right) => Corner(TopRight),
-            (Direction::Above, Direction::Below) => Vertical,
+            (Direction::Up, Direction::Left) => Corner(TopLeft),
+            (Direction::Up, Direction::Right) => Corner(TopRight),
+            (Direction::Up, Direction::Down) => Vertical,
 
             // Has left connection
             (Direction::Left, Direction::Right) => Horizontal,
-            (Direction::Left, Direction::Below) => Corner(BottomLeft),
+            (Direction::Left, Direction::Down) => Corner(BottomLeft),
 
             // Has right connection
             _ => Corner(BottomRight),
         }
     }
 
+    /// Assuming that this tile is located at `at`, returns true if it connects
+    /// to `to`. (See [`Tile::get_connections()`])
     pub fn connects(&self, at: Location, to: Location) -> bool {
         self.get_connections(at).contains(&to)
     }
