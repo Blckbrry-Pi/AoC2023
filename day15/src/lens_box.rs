@@ -1,17 +1,6 @@
 use std::fmt::Debug;
 
-#[derive(Clone, Copy, PartialEq, Eq)]
-pub struct Lens<'a> {
-    pub name: &'a str,
-    pub focal_length: usize,
-}
-
-impl Debug for Lens<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "[{} {}]", self.name, self.focal_length)
-    }
-}
-
+use crate::lens::Lens;
 
 #[derive(Clone, PartialEq)]
 pub struct LensBox<'a> {
@@ -30,13 +19,14 @@ impl<'a> LensBox<'a> {
     pub fn get_value(&self, box_idx: usize) -> usize {
         let mut total = 0;
         for (idx, lens) in self.labels.iter().copied().enumerate() {
-            total += (box_idx + 1) * (idx + 1) * lens.focal_length;
+            total += (box_idx + 1) * (idx + 1) * lens.focal_length();
         }
         total
     }
 
     pub fn add(&mut self, lens: Lens<'a>) {
-        if let Some(idx) = self.labels.iter().position(|lens_to_check| lens_to_check.name == lens.name) {
+        let matching_label_position = self.labels.iter().position(|in_box| in_box.name() == lens.name());
+        if let Some(idx) = matching_label_position {
             self.labels[idx] = lens;
         } else {
             self.labels.push(lens);
@@ -44,9 +34,17 @@ impl<'a> LensBox<'a> {
     }
 
     pub fn remove(&mut self, label: &'a str) {
-        if let Some(idx) = self.labels.iter().position(|lens| lens.name == label) {
+        let matching_label_position = self.labels.iter().position(|in_box| in_box.name() == label);
+        if let Some(idx) = matching_label_position {
             self.labels.remove(idx);
         }
+    }
+
+    pub fn len(&self) -> usize {
+        self.labels.len()
+    }
+    pub fn is_empty(&self) -> bool {
+        self.labels.is_empty()
     }
 }
 
