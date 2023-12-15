@@ -1,9 +1,6 @@
-use day12::spring_row::Row;
+use day12::{spring_row::Row, group_manager::GroupManager};
 
 fn main() {
-    println!("{:?}", Row::all_possible_groups(&[3, 1], "###..#".len()).collect::<Vec<_>>());
-
-
     let input = std::fs::read_to_string("./day12/test.txt")
         .expect("Couldn't read the input file");
 
@@ -18,23 +15,15 @@ fn main() {
         .flat_map(|mut r| r.valid_iter().collect::<Vec<_>>())
         .collect::<Vec<_>>();
 
-    // let possibilities_p2: usize = rows
-    //     .into_iter()
-    //     .map(|r| r.expand())
-    //     .map(|mut r| r.valid_iter().count())
-    //     .sum();
-
-    let possibilities_p2: usize = rows
-        .into_iter()
-        .map(|r| r.expand())
-        .map(|r| Row::all_possible_groups(&r.groups, r.tiles.len()).count())
-        .inspect(|a| println!("{a}"))
+    let managers = rows.iter().map(Row::expand).map(|row| (GroupManager::from_row(&row), row)).collect::<Vec<_>>();
+    let possibilities_p2: usize = managers.iter()
+        .map(|(manager, row)| manager.possibilities(row))
+        .map(Iterator::count)
         .sum();
-
-
+    
 
     let part1 = possibilities.len();
-    let part2 = possibilities_p2; // TODO: Part 2
+    let part2 = possibilities_p2;
 
     println!("Part 1: {part1}");
     println!("Part 2: {part2}");

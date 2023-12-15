@@ -1,6 +1,6 @@
 use std::fmt::Debug;
 
-use crate::tile::Tile;
+use crate::{tile::Tile, group::GroupPos};
 
 #[derive(Clone, PartialEq)]
 pub struct Row {
@@ -9,52 +9,14 @@ pub struct Row {
 }
 
 impl Row {
-    pub fn all_possible_groups(groups: &[usize], len: usize) -> impl Iterator<Item = Self> + '_ {
-        pub fn possible_groups_left_backwards(groups_left: &[usize], slots_left: usize) -> Box<dyn Iterator<Item = Vec<(usize, usize)>> + '_> {
-            if groups_left.is_empty() { return Box::new(std::iter::once(vec![])); }
+    pub fn group_positions(&self) -> Vec<GroupPos> {
+        let mut group_positions = Vec::new();
 
-            let idx_cap = slots_left - groups_left.iter().sum::<usize>() - groups_left.len() + 2;
-            let iter = (0..idx_cap)
-                .flat_map(move |idx| {
-                    possible_groups_left_backwards(
-                        &groups_left[1..],
-                        slots_left - groups_left[0] - idx - 1,
-                    )
-                        .map(move |mut vec| {
-                            vec.push((idx, groups_left[0]));
-                            vec
-                        })
-                });
-
-            Box::new(iter)
+        for i in 0..self.groups.len() {
+            group_positions.push(GroupPos::new(self.groups[i], &self.groups[..i], &self.groups[i + 1..], self.tiles.len()));
         }
 
-        possible_groups_left_backwards(groups, len)
-            .map(|mut steps| {
-                steps.reverse();
-                steps
-            })
-            .map(move |steps| {
-                let mut output = vec![];
-
-                for (skip, len) in steps {
-                    for _ in 0..skip { output.push(Tile::Open) }
-                    for _ in 0..len { output.push(Tile::Spring) }
-                    output.push(Tile::Open);
-                }
-                output.pop();
-                for _ in output.len()..len {
-                    output.push(Tile::Open);
-                }
-
-                if output.len() != len {
-                    println!("{groups:?} {len}");
-                    println!("{:?}", Row { tiles: output, groups: vec![] });
-                    panic!();
-                }
-
-                Row { tiles: output, groups: groups.to_vec() }
-            })
+        group_positions
     }
 
     pub fn parse(line: &str) -> Self {
@@ -67,6 +29,18 @@ impl Row {
             .collect();
         
         Self { tiles, groups }
+    }
+
+    pub fn render_possibility(&self, possibility: &[usize]) -> Row {
+        assert_eq!(possibility.len(), self.groups.len());
+
+        let mut output = vec![Tile::Open; self.tiles.len()];
+
+        for (len, idx) in self.groups.iter().copied().zip(possibility.iter().copied()) {
+            output[idx..idx+len].copy_from_slice(&vec![Tile::Spring; len]);
+        }
+
+        Self { tiles: output, groups: self.groups.to_vec() }
     }
 
     pub fn expand(&self) -> Self {
