@@ -25,46 +25,62 @@ impl GroupManager {
         self.groups.is_empty()
     }
 
-    fn possibility_iter(start: usize, groups_left: &[GroupPos]) -> Box<dyn Iterator<Item = Vec<usize>> + '_> {
+    fn possibility_iter<'a>(start: usize, groups_left: &'a [GroupPos], row: &'a Row, create_vecs: bool) -> Box<dyn Iterator<Item = Vec<usize>> + 'a> {
         if groups_left.is_empty() {
-            return Box::new(std::iter::once(vec![]));
+            if start < row.tiles.len() && row.tiles[start..].iter().any(|&tile| tile == Tile::Spring) {
+                return Box::new(std::iter::empty());
+            } else {
+                return Box::new(std::iter::once(vec![]));
+            }
         }
 
         let group_0_remaining_iter = groups_left[0].iter_group_starting_at(start);
 
-        let sub_iter = group_0_remaining_iter.flat_map(|range| {
+        let sub_iter = group_0_remaining_iter.map_while(move |range| {
+            if row.tiles[start..range.start].iter().any(|&tile| tile == Tile::Spring) {
+                return None;
+            }
             let new_start = range.end + 1;
-            let subgroup_parts = Self::possibility_iter(new_start, &groups_left[1..]);
+            let subgroup_parts = Self::possibility_iter(new_start, &groups_left[1..], row, create_vecs);
 
-            subgroup_parts.map(move |mut subgroup| {
-                subgroup.insert(0, range.start);
+            Some(subgroup_parts.map(move |mut subgroup| {
+                if create_vecs {
+                    subgroup.insert(0, range.start);
+                }
                 subgroup
-            })
-        });
+            }))
+        })
+        .flatten();
 
         Box::new(sub_iter)
     }
 
-    pub fn possibilities<'a>(&'a self, row: &'a Row) -> impl Iterator<Item = Vec<usize>> + 'a {
-        Self::possibility_iter(0, &self.groups)
-            .filter(|possibility| {
-                let mut outliers_found = false;
-                let mut next_block = 0;
-                let mut curr_tile_idx = 0;
-                while curr_tile_idx < row.tiles.len() {
-                    if next_block < possibility.len() && curr_tile_idx == possibility[next_block] {
-                        curr_tile_idx += row.groups[next_block];
-                        next_block += 1;
-                        continue;
-                    } else if row.tiles[curr_tile_idx] == Tile::Spring {
-                        outliers_found = true;
+    fn possibility_count_iter(start: usize, groups_left: &[GroupPos], row: &Row) -> usize {
+        if groups_left.is_empty() {
+            if start < row.tiles.len() && row.tiles[start..].iter().any(|&tile| tile == Tile::Spring) {
+                return 0;
+            } else {
+                return 1;
+            }
+        }
 
-                        break;
-                    }
-                    curr_tile_idx += 1;
-                }
-                !outliers_found
-            })
+        let group_0_remaining_iter = groups_left[0].iter_group_starting_at(start);
+
+        group_0_remaining_iter.map_while(move |range| {
+            if row.tiles[start..range.start].iter().any(|&tile| tile == Tile::Spring) {
+                return None;
+            }
+            let new_start = range.end + 1;
+            Some(Self::possibility_count_iter(new_start, &groups_left[1..], row))
+        })
+        .sum()
+    }
+
+    pub fn possibilities<'a>(&'a self, row: &'a Row, create_vecs: bool) -> impl Iterator<Item = Vec<usize>> + 'a {
+        Self::possibility_iter(0, &self.groups, row, create_vecs)
+    }
+    pub fn possibility_count(&self, row: &Row) -> usize {
+        Self::possibility_count_iter(0, &self.groups, row)
     }
 }
 
