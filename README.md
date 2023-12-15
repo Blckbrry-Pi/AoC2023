@@ -113,6 +113,12 @@ to be able to look back on it and understand what the hell I was thinking.
   - [x] Scripts
   - [ ] Cleanup
   - [ ] Comments
+- [ ] Day 12:
+  - [ ] Part 1
+  - [ ] Part 2
+  - [ ] Scripts
+  - [ ] Cleanup
+  - [ ] Comments
 - [ ] Day 13:
   - [x] Part 1
   - [x] Part 2
@@ -128,7 +134,7 @@ to be able to look back on it and understand what the hell I was thinking.
 - [ ] Day 15:
   - [x] Part 1
   - [x] Part 2
-  - [ ] Scripts
+  - [x] Scripts
   - [x] Cleanup
   - [ ] Comments
 

@@ -1,0 +1,45 @@
+#!/bin/zsh
+
+PROPER_COMMAND=false
+
+if [[ $# == 0 ]] || [[ $1 == '--all' ]] || [[ $1 == '-a' ]]; then
+    PROPER_COMMAND=true
+    RUN_C=true
+    RUN_CS=true
+    RUN_GO=true
+    RUN_JAVA=true
+    RUN_PYTHON=true
+    RUN_RUST=true
+    RUN_TS=true
+fi
+if [[ $1 == '-c' ]] || [[ $1 == '--c' ]]; then RUN_C=true; PROPER_COMMAND=true; fi
+if [[ $1 == '-m' ]] || [[ $1 == '--c-sharp' ]]; then RUN_CS=true; PROPER_COMMAND=true; fi # m for "Microsoft Java"
+if [[ $1 == '-g' ]] || [[ $1 == '--go' ]]; then RUN_GO=true; PROPER_COMMAND=true; fi
+if [[ $1 == '-j' ]] || [[ $1 == '--java' ]]; then RUN_JAVA=true; PROPER_COMMAND=true; fi
+if [[ $1 == '-p' ]] || [[ $1 == '--python' ]]; then RUN_PYTHON=true; PROPER_COMMAND=true; fi
+if [[ $1 == '-r' ]] || [[ $1 == '--rust' ]]; then RUN_RUST=true; PROPER_COMMAND=true; fi
+if [[ $1 == '-t' ]] || [[ $1 == '--ts' ]]; then RUN_TS=true; PROPER_COMMAND=true; fi
+
+if [[ $PROPER_COMMAND == false ]]; then
+    echo "Usage: ./scripts/dayXX [OPTION]"
+    echo "Options:"
+    echo "  -a, --all       Run all languages"
+    echo "  -c, --c         Run C"
+    echo "  -m, --c-sharp   Run C#"
+    echo "  -g, --go        Run Go"
+    echo "  -j, --java      Run Java"
+    echo "  -p, --python    Run Python"
+    echo "  -r, --rust      Run Rust"
+    echo "  -t, --ts        Run Typescript"
+    echo "  -h, --help      Display this help message"
+    exit 1
+fi
+
+
+export RUN_C=$RUN_C
+export RUN_CS=$RUN_CS
+export RUN_GO=$RUN_GO
+export RUN_JAVA=$RUN_JAVA
+export RUN_PYTHON=$RUN_PYTHON
+export RUN_RUST=$RUN_RUST
+export RUN_TS=$RUN_TS

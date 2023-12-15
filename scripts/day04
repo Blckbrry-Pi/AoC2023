@@ -1,4 +1,6 @@
 #!/bin/zsh
+source ./scripts/setup_env $1
+
 echo -e "\x1b[1m"
 echo '     _____       ___                    ______           '
 echo '    /     \     /   |   \    /         /      |   /    / '
@@ -10,10 +12,17 @@ echo '                                                         '
 echo -en '\x1b[0m'
 echo
 
-echo "C"
-./scripts/run/c_file day04/solve.c
-echo
 
-echo "Rust"
-./scripts/run/rust_file day04/solve.rs
-echo
+if [[ $RUN_C == true ]]; then
+    echo "C"
+    ./scripts/run/c_file day04/solve.c
+    echo
+fi
+
+
+if [[ $RUN_RUST == true ]]; then
+    echo "Rust"
+    ./scripts/run/rust_file day04/solve.rs
+    echo
+fi
+

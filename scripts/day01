@@ -1,4 +1,6 @@
 #!/bin/zsh
+source ./scripts/setup_env $1
+
 echo -e "\x1b[1m"
 echo '     _____       ___                    ______      ___  '
 echo '    /     \     /   |   \    /         /      |       /  '
@@ -10,30 +12,46 @@ echo '                                                         '
 echo -en '\x1b[0m'
 echo
 
-echo "C"
-./scripts/run/c_file day01/solve.c
-echo
 
-echo "C#"
-./scripts/run/c#_file day01/Solve.cs
-echo
+if [[ $RUN_C == true ]]; then
+    echo "C"
+    ./scripts/run/c_file day01/solve.c
+    echo
+fi
 
-echo "Go"
-/usr/bin/time -h go run day01/solve.go
-echo 
+if [[ $RUN_CS == true ]]; then
+    echo "C#"
+    ./scripts/run/c#_file day01/Solve.cs
+    echo
+fi
 
-echo "Java"
-/usr/bin/time -h java day01/Solve.java
-echo
+if [[ $RUN_GO == true ]]; then
+    echo "Go"
+    /usr/bin/time -h go run day01/solve.go
+    echo
+fi
 
-echo "Python"
-/usr/bin/time -h python3 day01/solve.py
-echo
+if [[ $RUN_JAVA == true ]]; then
+    echo "Java"
+    /usr/bin/time -h java day01/Solve.java
+    echo
+fi
 
-echo "Rust"
-./scripts/run/rust_file day01/solve.rs
-echo
 
-echo "Typescript"
-/usr/bin/time -h npx ts-node day01/solve.ts
-echo
+if [[ $RUN_PYTHON == true ]]; then
+    echo "Python"
+    /usr/bin/time -h python3 day01/solve.py
+    echo
+fi
+
+if [[ $RUN_RUST == true ]]; then
+    echo "Rust"
+    ./scripts/run/rust_file day01/solve.rs
+    echo
+fi
+
+if [[ $RUN_TS == true ]]; then
+    echo "Typescript"
+    /usr/bin/time -h npx ts-node day01/solve.ts
+    echo
+fi

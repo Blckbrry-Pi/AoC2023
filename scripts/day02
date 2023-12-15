@@ -1,4 +1,6 @@
 #!/bin/zsh
+source ./scripts/setup_env $1
+
 echo -e "\x1b[1m"
 echo '     _____       ___                    ______      ___  '
 echo '    /     \     /   |   \    /         /      |   /    | '
@@ -10,14 +12,20 @@ echo '                                                         '
 echo -en '\x1b[0m'
 echo
 
-echo "C"
-./scripts/run/c_file day02/solve.c
-echo
+if [[ $RUN_C == true ]]; then
+    echo "C"
+    ./scripts/run/c_file day02/solve.c
+    echo
+fi
 
-echo "C#"
-./scripts/run/c#_file day02/Solve.cs
-echo
+if [[ $RUN_CS == true ]]; then
+    echo "C#"
+    ./scripts/run/c#_file day02/Solve.cs
+    echo
+fi
 
-echo "Python"
-/usr/bin/time -h python3 day02/solve.py
-echo
+if [[ $RUN_GO == true ]]; then
+    echo "Go"
+    /usr/bin/time -h go run day02/solve.go
+    echo
+fi

@@ -1,4 +1,6 @@
 #!/bin/zsh
+source ./scripts/setup_env $1
+
 echo -e "\x1b[1m"
 echo '     _____       ___                    ______     _____ '
 echo '    /     \     /   |   \    /         /      |   /      '
@@ -10,10 +12,14 @@ echo '                                                         '
 echo -en '\x1b[0m'
 echo
 
-echo "Rust"
-./scripts/run/rust_crate day06
-echo
+if [[ $RUN_RUST == true ]]; then
+    echo "Rust"
+    ./scripts/run/rust_crate day06
+    echo
+fi
 
-echo "Typescript"
-/usr/bin/time -h npx ts-node day06/solve.ts
-echo
+if [[ $RUN_TS == true ]]; then
+    echo "Typescript"
+    /usr/bin/time -h npx ts-node day06/solve.ts
+    echo
+fi

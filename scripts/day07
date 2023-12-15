@@ -1,4 +1,6 @@
 #!/bin/zsh
+source ./scripts/setup_env $1
+
 echo -e "\x1b[1m"
 echo '     _____       ___                    ______     _____ '
 echo '    /     \     /   |   \    /         /      |        / '
@@ -10,10 +12,14 @@ echo '                                                         '
 echo -en '\x1b[0m'
 echo
 
-echo "Python"
-/usr/bin/time -h python3 day07/solve.py
-echo
+if [[ $RUN_PYTHON == true ]]; then
+    echo "Python"
+    /usr/bin/time -h python3 day07/solve.py
+    echo
+fi
 
-echo "Rust"
-./scripts/run/rust_crate day07
-echo
+if [[ $RUN_RUST == true ]]; then
+    echo "Rust"
+    ./scripts/run/rust_crate day07
+    echo
+fi

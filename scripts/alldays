@@ -1,10 +1,17 @@
-./scripts/day01
-./scripts/day02
-./scripts/day03
-./scripts/day04
-./scripts/day05
-./scripts/day06
-./scripts/day07
-./scripts/day08
-./scripts/day09
-./scripts/day10
+#!/bin/zsh
+
+./scripts/day01 $1
+./scripts/day02 $1
+./scripts/day03 $1
+./scripts/day04 $1
+./scripts/day05 $1
+./scripts/day06 $1
+./scripts/day07 $1
+./scripts/day08 $1
+./scripts/day09 $1
+./scripts/day10 $1
+./scripts/day11 $1
+# ./scripts/day12 $1
+# ./scripts/day13 $1
+# ./scripts/day14 $1
+./scripts/day15 $1
