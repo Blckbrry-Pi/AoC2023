@@ -12,6 +12,6 @@
 ./scripts/day10 $1
 ./scripts/day11 $1
 # ./scripts/day12 $1
-# ./scripts/day13 $1
-# ./scripts/day14 $1
+./scripts/day13 $1
+./scripts/day14 $1
 ./scripts/day15 $1

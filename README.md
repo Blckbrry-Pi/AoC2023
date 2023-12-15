@@ -122,13 +122,13 @@ to be able to look back on it and understand what the hell I was thinking.
 - [ ] Day 13:
   - [x] Part 1
   - [x] Part 2
-  - [ ] Scripts
+  - [x] Scripts
   - [ ] Cleanup
   - [ ] Comments
 - [ ] Day 14:
   - [x] Part 1
   - [x] Part 2
-  - [ ] Scripts
+  - [x] Scripts
   - [ ] Cleanup
   - [ ] Comments
 - [ ] Day 15:
