@@ -137,4 +137,10 @@ to be able to look back on it and understand what the hell I was thinking.
   - [x] Scripts
   - [x] Cleanup
   - [ ] Comments
+- [ ] Day 16:
+  - [x] Part 1
+  - [x] Part 2
+  - [ ] Scripts
+  - [ ] Cleanup
+  - [ ] Comments
 
