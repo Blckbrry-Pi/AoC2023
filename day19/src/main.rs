@@ -17,7 +17,7 @@ fn main() {
         }
     }
 
-    let part2 = workflows.run_range(AttribRange::new((1, 4001), (1, 4001), (1, 4001), (1, 4001))); // TODO: Part 2
+    let part2 = workflows.run_range(AttribRange::new((1, 4001), (1, 4001), (1, 4001), (1, 4001)));
 
     println!("Part 1: {part1}");
     println!("Part 2: {part2}");
