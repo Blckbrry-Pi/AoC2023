@@ -149,4 +149,10 @@ to be able to look back on it and understand what the hell I was thinking.
   - [ ] Scripts
   - [ ] Cleanup
   - [ ] Comments
+- [ ] Day 18:
+  - [x] Part 1
+  - [ ] Part 2
+  - [ ] Scripts
+  - [ ] Cleanup
+  - [ ] Comments
 
