@@ -140,24 +140,24 @@ to be able to look back on it and understand what the hell I was thinking.
 - [ ] Day 16:
   - [x] Part 1
   - [x] Part 2
-  - [ ] Scripts
+  - [x] Scripts
   - [ ] Cleanup
   - [ ] Comments
 - [ ] Day 17:
   - [x] Part 1
   - [x] Part 2
-  - [ ] Scripts
+  - [x] Scripts
   - [ ] Cleanup
   - [ ] Comments
 - [ ] Day 18:
   - [x] Part 1
   - [ ] Part 2
-  - [ ] Scripts
+  - [x] Scripts
   - [ ] Cleanup
   - [ ] Comments
 - [ ] Day 19:
   - [x] Part 1
   - [x] Part 2
-  - [ ] Scripts
+  - [x] Scripts
   - [ ] Cleanup
   - [ ] Comments

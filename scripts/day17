@@ -1,0 +1,19 @@
+#!/bin/zsh
+source ./scripts/setup_env $1
+
+echo -e "\x1b[1m"
+echo '     _____       ___                    ___      _____   '
+echo '    /     \     /   |   \    /            /          /   '
+echo '   /      |    /    |    \  /            /          /    '
+echo '  /      /    /_____|     \/            /       ---/     '
+echo ' /      /    /      |     /            /          /      '
+echo '/____.-^    /       |    /         ___/___       /       '
+echo '                                                         '
+echo -en '\x1b[0m'
+echo
+
+if [[ $RUN_RUST == true ]]; then
+    echo "Rust"
+    ./scripts/run/rust_crate day17
+    echo
+fi
