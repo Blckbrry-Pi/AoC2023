@@ -164,19 +164,19 @@ to be able to look back on it and understand what the hell I was thinking.
 - [ ] Day 20:
   - [x] Part 1
   - [x] Part 2
-  - [ ] Scripts
+  - [x] Scripts
   - [x] Cleanup
   - [ ] Comments
 - [ ] Day 21:
   - [x] Part 1
   - [ ] Part 2
-  - [ ] Scripts
+  - [x] Scripts
   - [ ] Cleanup
   - [ ] Comments
 - [ ] Day 22:
   - [x] Part 1
   - [x] Part 2
-  - [ ] Scripts
+  - [x] Scripts
   - [ ] Cleanup
   - [ ] Comments
 
