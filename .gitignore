@@ -9,6 +9,9 @@ node_modules
 **/input.txt
 **/test.txt
 
+# Temporary text files
+**/_*.txt
+
 # Build artifacts
 /target
 /Solve
