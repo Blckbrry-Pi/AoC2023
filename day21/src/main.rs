@@ -1,4 +1,4 @@
-use std::collections::{HashSet, HashMap};
+use std::collections::HashSet;
 
 use day21::elf_state::ElfState;
 use day21::map::Map;

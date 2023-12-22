@@ -1,4 +1,4 @@
-use day22::{brick::Brick, brick_layout::BrickLayout};
+use day22::brick_layout::BrickLayout;
 
 
 fn main() {

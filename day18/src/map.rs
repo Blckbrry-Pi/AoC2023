@@ -5,10 +5,6 @@ use crate::pos::Pos;
 use crate::color::Color;
 use crate::line::Line;
 use crate::dir::Direction;
-use crate::superchunk::Superchunk;
-
-
-// const SUPERCHUNK_SIZE: isize = 2048;
 
 #[derive(Clone)]
 pub struct Map {

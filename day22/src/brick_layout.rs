@@ -1,4 +1,5 @@
-use std::{collections::{HashMap, HashSet}, fmt::Debug, sync::Arc};
+use std::collections::{HashMap, HashSet};
+use std::fmt::Debug;
 
 use crate::brick::Brick;
 
@@ -91,6 +92,8 @@ impl BrickLayout {
             if !not_disintegratable.contains(&idx) { continue }
             
             let mut fallen: HashSet<_> = [idx].into_iter().collect();
+
+            #[allow(clippy::needless_range_loop)] // The code clippy suggested was like 20x less readable
             for other_idx in idx+1..self.bricks.len() {
                 if !reliance_table[other_idx].is_empty() && reliance_table[other_idx].is_subset(&fallen) {
                     fallen.insert(other_idx);
@@ -133,6 +136,8 @@ impl Debug for BrickLayout {
             let mut line = vec!['.'; max_horiz_idx];
 
             for (idx, brick) in self.bricks.iter().enumerate() {
+                
+                #[allow(clippy::needless_range_loop)] // The code clippy suggested was like 10x less readable
                 for horiz_idx in 0..max_horiz_idx {
                     let test_brick = if f.alternate() {
                         Brick::new((0, horiz_idx, z), (10000000, horiz_idx, z))
