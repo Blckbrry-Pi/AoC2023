@@ -1,10 +1,10 @@
-use std::{collections::{HashMap, HashSet}, fmt::Debug};
+use std::{collections::{HashMap, HashSet, BTreeMap}, fmt::Debug};
 
 use crate::modules::{Module, PulseInfo, Pulse};
 
-#[derive(Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq, Hash)]
 pub struct ModuleSet<'a> {
-    modules: HashMap<&'a str, Module<'a>>,
+    modules: BTreeMap<&'a str, Module<'a>>,
 }
 
 impl<'a> ModuleSet<'a> {
@@ -39,10 +39,12 @@ impl<'a> ModuleSet<'a> {
         self.modules.iter().filter(|(_, module)| module.is_low()).map(|(name, _)| *name).collect()
     }
 
-    pub fn pulse(&mut self) -> (usize, usize, bool) {
+    pub fn pulse(&mut self, monitor: &str) -> (usize, usize, bool, Vec<(usize, Pulse)>) {
         let mut lo_pulses = 1;
         let mut hi_pulses = 0;
         let mut rx_pulse_seen = false;
+
+        let mut monitoring = vec![];
 
         let mut pending_pulses = self.modules.get_mut("broadcaster").unwrap().input_pulse(PulseInfo {
             pulse: crate::modules::Pulse::Lo,
@@ -53,13 +55,21 @@ impl<'a> ModuleSet<'a> {
         lo_pulses += pending_pulses.iter().filter(|pulse| pulse.pulse == Pulse::Lo).count();
         hi_pulses += pending_pulses.iter().filter(|pulse| pulse.pulse == Pulse::Hi).count();
 
-        while !pending_pulses.is_empty() {
-            let mut new_pending_pulses = vec![];
+        for i in 0.. {
+            if pending_pulses.is_empty() {
+                break;
+            }
 
+            let mut new_pending_pulses = vec![];
             for pulse in pending_pulses {
                 if pulse.target == "rx" && pulse.pulse == Pulse::Lo {
                     rx_pulse_seen = true;
                 }
+
+                if pulse.target == monitor {
+                    monitoring.push((i, pulse.pulse));
+                }
+
                 let Some(target) = self.modules.get_mut(pulse.target) else { continue };
                 let (pulses, irrel_lo_pulses, irrel_hi_pulses) = target.input_pulse(pulse);
                 lo_pulses += irrel_lo_pulses;
@@ -71,9 +81,11 @@ impl<'a> ModuleSet<'a> {
 
             lo_pulses += pending_pulses.iter().filter(|pulse| pulse.pulse == Pulse::Lo).count();
             hi_pulses += pending_pulses.iter().filter(|pulse| pulse.pulse == Pulse::Hi).count();
+
+
         }
 
-        (lo_pulses, hi_pulses, rx_pulse_seen)
+        (lo_pulses, hi_pulses, rx_pulse_seen, monitoring)
     }
 
     pub fn bits_of_state(&self) -> usize {
@@ -170,6 +182,19 @@ impl<'a> ModuleSet<'a> {
     }
     pub fn is_empty(&self) -> bool {
         self.modules.is_empty()
+    }
+
+    pub fn subsets(&self) -> impl Iterator<Item = Self> + '_ {
+        let broadcaster = self.modules.get("broadcaster").unwrap();
+
+        broadcaster.targets().iter().chain(broadcaster.low_targets()).map(|name| {
+            let subset_dependents = self.dependents_of(name);
+            let subset_modules = self.modules.iter()
+                .filter(|(&name, _)| subset_dependents.contains(name) || name == "broadcaster")
+                .map(|(_, module)| (module.name(), module.clone()))
+                .collect();
+            Self { modules: subset_modules }
+        })
     }
 }
 
