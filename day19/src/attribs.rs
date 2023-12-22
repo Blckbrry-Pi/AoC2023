@@ -102,8 +102,6 @@ impl Attribs {
     pub fn parse(line: &str) -> Self {
         let inner = line.trim_matches(['{', '}']);
 
-        println!("{inner}");
-
         let parts: Vec<_> = inner.split(',').collect();
 
         let [x, m, a, s] = [
