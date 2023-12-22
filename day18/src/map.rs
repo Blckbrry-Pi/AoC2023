@@ -5,9 +5,10 @@ use crate::pos::Pos;
 use crate::color::Color;
 use crate::line::Line;
 use crate::dir::Direction;
+use crate::superchunk::Superchunk;
 
 
-const SUPERCHUNK_SIZE: isize = 2048;
+// const SUPERCHUNK_SIZE: isize = 2048;
 
 #[derive(Clone)]
 pub struct Map {
@@ -49,22 +50,17 @@ impl Map {
     }
 
     pub fn count_internal(&self) -> usize {
-        let min_x = self.dug_tiles.keys().map(|pos| pos.x).min().unwrap() - 2;
-        let min_y = self.dug_tiles.keys().map(|pos| pos.y).min().unwrap() - 2;
-        let max_x = self.dug_tiles.keys().map(|pos| pos.x).max().unwrap() + 2;
-        let max_y = self.dug_tiles.keys().map(|pos| pos.y).max().unwrap() + 2;
+        let (min, max) = Pos::iter_range(self.dug_tiles.keys().copied());
+        let (min_x, max_x) = (min.x - 2, max.x + 2);
+        let (min_y, max_y) = (min.y - 2, max.y + 2);
 
         (max_y - min_y + 1) as usize * (max_x - min_x + 1) as usize - self.get_external(HashSet::new(), None).len()
     }
 
     pub fn get_external(&self, no_touch_tiles: HashSet<Pos>, starting_tiles: Option<HashSet<Pos>>) -> HashSet<Pos> {
-        let min_x = self.dug_tiles.keys().chain(no_touch_tiles.iter()).map(|pos| pos.x).min().unwrap() - 2;
-        let min_y = self.dug_tiles.keys().chain(no_touch_tiles.iter()).map(|pos| pos.y).min().unwrap() - 2;
-        let max_x = self.dug_tiles.keys().chain(no_touch_tiles.iter()).map(|pos| pos.x).max().unwrap() + 2;
-        let max_y = self.dug_tiles.keys().chain(no_touch_tiles.iter()).map(|pos| pos.y).max().unwrap() + 2;
-
-        println!("x: {min_x} to {max_x}");
-        println!("y: {min_y} to {max_y}");
+        let (min, max) = Pos::iter_range(self.dug_tiles.keys().copied());
+        let (min_x, max_x) = (min.x - 2, max.x + 2);
+        let (min_y, max_y) = (min.y - 2, max.y + 2);
 
         let mut definitely_external = HashSet::new();
         let mut external_queue = HashSet::new();
@@ -122,54 +118,6 @@ impl Map {
         definitely_external
     }
 
-    pub fn get_external_superchunks(&self, no_touch_tiles: HashSet<Pos>, starting_tiles: Option<HashSet<Pos>>, superchunk_size: isize) -> HashSet<Pos> {
-        let superchunked = self.superchunked(superchunk_size);
-
-        superchunked.get_external(no_touch_tiles, starting_tiles)
-    }
-
-    pub fn estimate_internal(&self, superchunk_size: isize) -> usize {
-        let min_x = self.dug_tiles.keys().map(|pos| pos.x).min().unwrap();
-        let min_y = self.dug_tiles.keys().map(|pos| pos.y).min().unwrap();
-        let max_x = self.dug_tiles.keys().map(|pos| pos.x).max().unwrap();
-        let max_y = self.dug_tiles.keys().map(|pos| pos.y).max().unwrap();
-
-        let min_x_superchunk = min_x / superchunk_size - 2;
-        let min_y_superchunk = min_y / superchunk_size - 2;
-        let max_x_superchunk = max_x / superchunk_size + 2;
-        let max_y_superchunk = max_y / superchunk_size + 2;
-
-        let tiles_verti = max_y_superchunk - min_y_superchunk + 1;
-        let tiles_horiz = max_x_superchunk - min_x_superchunk + 1;
-
-        let (tiles_verti, tiles_horiz) = (tiles_verti as usize, tiles_horiz as usize);
-        let superchunk_tiles = self.get_external_superchunks(HashSet::new(), None, superchunk_size).len();
-
-        (tiles_verti * tiles_horiz - superchunk_tiles) * superchunk_size as usize * superchunk_size as usize
-    }
-
-    pub fn cap_range(&self, tiles: HashSet<Pos>) -> HashSet<Pos> {
-        let min_x = self.dug_tiles.keys().map(|pos| pos.x).min().unwrap() - 2;
-        let min_y = self.dug_tiles.keys().map(|pos| pos.y).min().unwrap() - 2;
-        let max_x = self.dug_tiles.keys().map(|pos| pos.x).max().unwrap() + 2;
-        let max_y = self.dug_tiles.keys().map(|pos| pos.y).max().unwrap() + 2;
-        
-        tiles.into_iter()
-            .filter(|pos| min_x <= pos.x && pos.x <= max_x)
-            .filter(|pos| min_y <= pos.y && pos.y <= max_y)
-            .collect()
-    }
-    pub fn cap_range_superchunks(&self, tiles: HashSet<Pos>, superchunk_size: isize) -> HashSet<Pos> {
-        let min_x = self.dug_tiles.keys().map(|pos| pos.x).min().unwrap() / superchunk_size - 2;
-        let min_y = self.dug_tiles.keys().map(|pos| pos.y).min().unwrap() / superchunk_size - 2;
-        let max_x = self.dug_tiles.keys().map(|pos| pos.x).max().unwrap() / superchunk_size + 2;
-        let max_y = self.dug_tiles.keys().map(|pos| pos.y).max().unwrap() / superchunk_size + 2;
-        
-        tiles.into_iter()
-            .filter(|pos| min_x <= pos.x / superchunk_size && pos.x / superchunk_size <= max_x)
-            .filter(|pos| min_y <= pos.y / superchunk_size && pos.y / superchunk_size <= max_y)
-            .collect()
-    }
 
     pub fn superchunked(&self, superchunk_size: isize) -> Self {
         let tiles = self.dug_tiles
@@ -182,67 +130,28 @@ impl Map {
         }
     }
 
-    pub fn get_superchunked_border(&self, external: HashSet<Pos>, superchunk_size: isize) -> (HashSet<Pos>, HashSet<Pos>) {
-        let superchunked_self = self.superchunked(superchunk_size);
-
-        let mut external_border = HashSet::new();
-        let mut internal_border = HashSet::new();
-
-
-        for &pos in superchunked_self.dug_tiles.keys() {
-            let pos_l = Direction::L.step(pos);
-            if external.contains(&pos_l) {
-                for i in 0..superchunk_size {
-                    let external_border_pos = Pos::new(pos.x * superchunk_size - 1, pos_l.y * superchunk_size + i);
-                    let internal_border_pos = Pos::new(pos.x * superchunk_size, pos_l.y * superchunk_size + i);
-                    external_border.insert(external_border_pos);
-                    internal_border.insert(internal_border_pos);
-                }
-            }
-
-            let pos_r = Direction::R.step(pos);
-            if external.contains(&pos_r) {
-                for i in 0..superchunk_size {
-                    let external_border_pos = Pos::new(pos.x * superchunk_size + superchunk_size, pos_r.y * superchunk_size + i);
-                    let internal_border_pos = Pos::new(pos.x * superchunk_size + superchunk_size - 1, pos_r.y * superchunk_size + i);
-                    external_border.insert(external_border_pos);
-                    internal_border.insert(internal_border_pos);
-                }
-            }
-            
-            let pos_u = Direction::U.step(pos);
-            if external.contains(&pos_u) {
-                for i in 0..superchunk_size {
-                    let external_border_pos = Pos::new(pos_u.x * superchunk_size + i, pos.y * superchunk_size - 1);
-                    let internal_border_pos = Pos::new(pos_u.x * superchunk_size + i, pos.y * superchunk_size);
-                    external_border.insert(external_border_pos);
-                    internal_border.insert(internal_border_pos);
-                }
-            }
-
-            let pos_d = Direction::D.step(pos);
-            if external.contains(&pos_d) {
-                for i in 0..superchunk_size {
-                    let external_border_pos = Pos::new(pos_d.x * superchunk_size + i, pos.y * superchunk_size + superchunk_size);
-                    let internal_border_pos = Pos::new(pos_d.x * superchunk_size + i, pos.y * superchunk_size + superchunk_size - 1);
-                    external_border.insert(external_border_pos);
-                    internal_border.insert(internal_border_pos);
-                }
-            }
-        }
-
-        let internal_border = internal_border.difference(&self.dug_tiles.keys().copied().collect()).copied().collect();
-
-        // println!("a");
-        
-        (internal_border, external_border)
-    }
 
     pub fn visualize(tiles: HashSet<Pos>) -> Self {
         Self {
             dug_tiles: tiles.into_iter().map(|key| (key, Color::new(0, 0, 0))).collect(),
             curr_pos: Pos::new(0, 0),
         }
+    }
+
+    pub fn taken_tiles(&self) -> impl Iterator<Item = Pos> + '_ {
+        self.dug_tiles.keys().copied()
+    }
+
+    pub fn range(&self) -> (Pos, Pos) {
+        Pos::iter_range(self.dug_tiles.keys().copied())
+    }
+
+    pub fn offset(self, offset: Pos) -> Self {
+        let dug_tiles = self.dug_tiles.into_iter()
+            .map(|(pos, color)| (pos + offset, color))
+            .collect();
+        let curr_pos = self.curr_pos + offset;
+        Self { dug_tiles, curr_pos }
     }
 }
 
@@ -251,10 +160,9 @@ impl Debug for Map {
         if self.dug_tiles.is_empty() {
             return Ok(())
         }
-        let min_x = self.dug_tiles.keys().map(|pos| pos.x).min().unwrap();
-        let min_y = self.dug_tiles.keys().map(|pos| pos.y).min().unwrap();
-        let max_x = self.dug_tiles.keys().map(|pos| pos.x).max().unwrap();
-        let max_y = self.dug_tiles.keys().map(|pos| pos.y).max().unwrap();
+        let (min, max) = Pos::iter_range(self.dug_tiles.keys().copied());
+        let (min_x, max_x) = (min.x, max.x);
+        let (min_y, max_y) = (min.y, max.y);
 
         for y in min_y..=max_y {
             for x in min_x..=max_x {

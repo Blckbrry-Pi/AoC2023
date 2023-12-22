@@ -32,4 +32,38 @@ impl Pos {
             y: self.y,
         }
     }
+
+    pub fn min(&self, other: Self) -> Self {
+        Self {
+            x: self.x.min(other.x),
+            y: self.y.min(other.y),
+        }
+    }
+    pub fn max(&self, other: Self) -> Self {
+        Self {
+            x: self.x.max(other.x),
+            y: self.y.max(other.y),
+        }
+    }
+
+    pub fn iter_range(iter: impl Iterator<Item = Self>) -> (Self, Self) {
+        let mut min = Self::new(std::isize::MAX, std::isize::MAX);
+        let mut max = Self::new(std::isize::MIN, std::isize::MIN);
+        for pos in iter {
+            min = min.min(pos);
+            max = max.max(pos);
+        }
+        (min, max)
+    }
 }
+
+impl std::ops::Add for Pos {
+    type Output = Self;
+    fn add(self, other: Self) -> Self {
+        Self {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+

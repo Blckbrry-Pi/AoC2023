@@ -151,7 +151,7 @@ to be able to look back on it and understand what the hell I was thinking.
   - [ ] Comments
 - [ ] Day 18:
   - [x] Part 1
-  - [ ] Part 2
+  - [x] Part 2
   - [x] Scripts
   - [ ] Cleanup
   - [ ] Comments
