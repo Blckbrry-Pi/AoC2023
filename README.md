@@ -163,9 +163,9 @@ to be able to look back on it and understand what the hell I was thinking.
   - [ ] Comments
 - [ ] Day 20:
   - [x] Part 1
-  - [ ] Part 2
+  - [x] Part 2
   - [ ] Scripts
-  - [ ] Cleanup
+  - [x] Cleanup
   - [ ] Comments
 - [ ] Day 21:
   - [x] Part 1
