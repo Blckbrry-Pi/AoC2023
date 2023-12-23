@@ -71,7 +71,7 @@ impl Brick {
         let z_intersects_variant_b = other.z <= self.z && self.z < other.z + other.l;
         let z_intersects_variant_c = self.z <= other.z && other.z + other.l <= self.z + self.l;
         let z_intersects_variant_d = other.z <= self.z && self.z + self.l <= other.z + other.l;
-        // println!("a: {z_intersects_variant_a}, b: {z_intersects_variant_b}, c: {z_intersects_variant_c}, d: {z_intersects_variant_d}");
+
         z_intersects_variant_a || z_intersects_variant_b || z_intersects_variant_c || z_intersects_variant_d
     }
 

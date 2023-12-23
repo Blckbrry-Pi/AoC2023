@@ -12,15 +12,8 @@ fn main() {
 
     let sole_reliance_count: usize = sole_reliances.into_values().map(|set| set.len()).sum();
 
-    println!("{reliance_table:#?}");
-    // println!("{disintegratable:?}");
-    // println!("{sole_reliances:?}");
-
-    // println!("{layout:?}");
-    // println!("{layout:#?}");
-
-    let part1 = disintegratable.len(); // TODO: Part 1
-    let part2 = sole_reliance_count; // TODO: Part 2
+    let part1 = disintegratable.len();
+    let part2 = sole_reliance_count;
 
     println!("Part 1: {part1}");
     println!("Part 2: {part2}");
