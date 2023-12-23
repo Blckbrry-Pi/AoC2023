@@ -5,3 +5,10 @@ resolver = "2"
 
 [profile.release]
 debug = true
+
+[profile.stupid-optimizations]
+inherits = "release"
+debug = false
+panic = "abort"
+lto = "fat"
+strip = "symbols"

@@ -1,7 +1,14 @@
 #!/bin/zsh
 
-cargo build -q --release
+if $STUPID_OPTIMIZATIONS; then
+    cargo build -q --profile stupid-optimizations -Z build-std=panic_abort,std --target aarch64-apple-darwin
 
-/usr/bin/time -h cargo run --bin $1 -q --release $1
+    /usr/bin/time -h cargo run -q --bin $1 --profile stupid-optimizations -Z build-std=panic_abort,std --target aarch64-apple-darwin
+else
+    cargo build -q --release
+
+    /usr/bin/time -h cargo run --bin $1 -q --release $1
+fi
+
 
 # rm -r target
